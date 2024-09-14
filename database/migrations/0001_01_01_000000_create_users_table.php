@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone')->nullable();
+            $table->string('password'); // Add this line if it doesn't exist
             $table->string('national_id')->nullable();
             $table->foreignId('user_type_id')->constrained('user_types')->onDelete('cascade');
             $table->timestamps();

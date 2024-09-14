@@ -15,13 +15,15 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
-
-//        User::factory()->create([
-//            'name' => 'Test User',
-//            'email' => 'test@example.com',
+//        $this->call([
+//            UserTypeSeeder::class
 //        ]);
-        $this->call([
-        UserTypeSeeder::class
+        User::create([
+            'name' => 'super-admin',
+            'email' => 'super-admin@gmail.com',
+            'password' => bcrypt('super-admin'),
+            'user_type_id' => 4,
         ]);
+
     }
 }

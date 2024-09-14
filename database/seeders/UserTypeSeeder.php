@@ -15,9 +15,10 @@ class UserTypeSeeder extends Seeder
     public function run(): void
     {
         \DB::table('user_types')->insert([
-            ['type_name' => 'Doctor', 'created_at' => now(), 'updated_at' => now()],
-            ['type_name' => 'Employee', 'created_at' => now(), 'updated_at' => now()],
-            ['type_name' => 'Patient', 'created_at' => now(), 'updated_at' => now()],
+            ['type_name' => 'doctor', 'created_at' => now(), 'updated_at' => now()],
+            ['type_name' => 'employee', 'created_at' => now(), 'updated_at' => now()],
+            ['type_name' => 'patient', 'created_at' => now(), 'updated_at' => now()],
+            ['type_name' => 'super-admin', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 }
