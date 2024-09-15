@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
 use App\Services\DoctorService;
+use App\Http\Requests\Doctor\StoreDoctorRequest;
 
 class DoctorController extends Controller
 {
@@ -18,7 +19,8 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        //
+        $doctors = $this->doctorService->index();
+        return view('admin.doctors.index',compact('doctors'));
     }
 
     /**
@@ -26,7 +28,8 @@ class DoctorController extends Controller
      */
     public function create()
     {
-        return $this->doctorService->create();
+        $data = $this->doctorService->create();
+        return view('admin.doctors.create',compact('data'));
     }
 
     /**
@@ -34,7 +37,9 @@ class DoctorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
+        $this->doctorService->store($request);
+        return redirect()->route('admin.doctors.index')->with('success', 'Doctor created successfully');
     }
 
     /**

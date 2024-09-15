@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Doctor;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -11,7 +11,7 @@ class StoreDoctorRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return true; // or check for 'add-doctor' permission
     }
 
     /**
@@ -24,15 +24,8 @@ class StoreDoctorRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:doctors,email',
-            'phone' => 'nullable|string|max:20',
-            'national_id' => 'nullable|string|max:20',
-            'experience_years' => 'required|integer|min:0',
-            'qualification' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'gender' => 'nullable|in:male,female',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'department_id' => 'required|exists:departments,id',
-            'specialty_id' => 'required|exists:specialties,id',
+            'specialization' => 'required|string|max:255',
+            // Add other necessary fields
         ];
     }
     public function messages(): array

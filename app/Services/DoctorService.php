@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
+use App\Models\User;
+use App\Models\Doctor;
+use Illuminate\Support\Facades\Hash;
 use App\Repositories\DoctorRepository;
-use App\Http\Requests\StoreDoctorRequest;
-
+use App\Http\Requests\Doctor\StoreDoctorRequest;
+use Illuminate\Http\Request;
 class DoctorService
 {
     protected $doctorRepository;
@@ -12,8 +15,16 @@ class DoctorService
     {
         $this->doctorRepository = $doctorRepository;
     }
+    public function index()
+    {
+        return $this->doctorRepository->index();
+    }
     public function create( )
     {
         return $this->doctorRepository->create();
+    }
+    public function store(Request $request)
+    {
+       return $this->doctorRepository->store($request);
     }
 }
