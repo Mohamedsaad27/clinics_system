@@ -11,7 +11,8 @@ class Doctor extends Model
 
     protected $fillable = [
         'doctor_id',
-        'specialization',
+        'department_id',
+        'specialty_id',
         'experience_years',
         'qualification',
     ];
@@ -20,5 +21,15 @@ class Doctor extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'doctor_id', 'id');
+    }
+    // Define each doctor is a department
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+    // Define each doctor is a specialty
+    public function specialty()
+    {
+        return $this->belongsTo(Specialty::class);
     }
 }

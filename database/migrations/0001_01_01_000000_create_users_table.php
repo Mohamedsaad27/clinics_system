@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('password'); // Add this line if it doesn't exist
             $table->string('national_id')->nullable();
+            $table->enum('gender', ['male', 'female'])->nullable();
+            $table->string('image')->nullable();
             $table->foreignId('user_type_id')->constrained('user_types')->onDelete('cascade');
             $table->timestamps();
         });

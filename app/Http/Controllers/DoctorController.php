@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Doctor;
 use Illuminate\Http\Request;
+use App\Services\DoctorService;
 
 class DoctorController extends Controller
 {
+    protected $doctorService;
+    public function __construct(DoctorService $doctorService)
+    {
+        $this->doctorService = $doctorService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -20,7 +26,7 @@ class DoctorController extends Controller
      */
     public function create()
     {
-        //
+        return $this->doctorService->create();
     }
 
     /**
