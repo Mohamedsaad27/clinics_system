@@ -18,7 +18,7 @@ class DoctorRepository implements DoctorRepositoryInterface
     public function index()
     {
         $doctors = Doctor::with('user', 'department', 'specialty')->get();
-        return view('doctors.index', compact('doctors'));
+        return view('admin.doctor.create', compact('doctors'));
     }
     public function create()
     {

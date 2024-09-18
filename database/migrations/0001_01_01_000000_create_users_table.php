@@ -4,18 +4,12 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('user_types', function (Blueprint $table) {
-            $table->id();
-            $table->string('type_name',50);
-            $table->timestamps();
-        });
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -24,8 +18,8 @@ return new class extends Migration
             $table->string('password'); // Add this line if it doesn't exist
             $table->string('national_id')->nullable();
             $table->enum('gender', ['male', 'female'])->nullable();
+            $table->enum('type', ['admin', 'doctor', 'reciepcent_employee', 'nurse_employee', 'patient']);
             $table->string('image')->nullable();
-            $table->foreignId('user_type_id')->constrained('user_types')->onDelete('cascade');
             $table->timestamps();
         });
 
@@ -50,7 +44,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_types');
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');

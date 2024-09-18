@@ -1,14 +1,13 @@
-@extends('admin.layouts.header')
+<x-admin-layout>
 
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3">
-                @include('admin.layouts.aside')
             </div>
             <div class="col-md-9">
                 <main class="mt-4">
                     <h1>Add Doctor</h1>
-                    <form action="{{ route('admin.doctors.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('doctors.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-md-6 mb-3">
@@ -29,9 +28,7 @@
                                 <label for="specialty_id" class="form-label">Specialty</label>
                                 <select class="form-select" id="specialty_id" name="specialty_id" required>
                                     <option value="">Select a specialty</option>
-                                    @foreach($data['specialties'] as $specialty)
-                                        <option value="{{ $specialty->id }}">{{ $specialty->name }}</option>
-                                    @endforeach
+
                                 </select>
                             </div>
                         </div>
@@ -40,9 +37,7 @@
                                 <label for="department_id" class="form-label">Department</label>
                                 <select class="form-select" id="department_id" name="department_id" required>
                                     <option value="">Select a department</option>
-                                    @foreach($data['departments'] as $department)
-                                        <option value="{{ $department->id }}">{{ $department->name }}</option>
-                                    @endforeach
+
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
@@ -67,11 +62,13 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="experience_years" class="form-label">Years of Experience</label>
-                                <input type="number" class="form-control" id="experience_years" name="experience_years" required min="0">
+                                <input type="number" class="form-control" id="experience_years" name="experience_years"
+                                    required min="0">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="qualification" class="form-label">Qualification</label>
-                                <input type="text" class="form-control" id="qualification" name="qualification" required>
+                                <input type="text" class="form-control" id="qualification" name="qualification"
+                                    required>
                             </div>
                         </div>
                         <div class="mb-3">
@@ -84,3 +81,5 @@
             </div>
         </div>
     </div>
+
+</x-admin-layout>

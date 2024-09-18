@@ -23,10 +23,10 @@ class User extends Authenticatable
         'user_type_id',
         'image',
         'gender',
-        'password', 
+        'password',
     ];
 
-   
+
     protected $hidden = [
         'password',
         'remember_token',
@@ -40,14 +40,6 @@ class User extends Authenticatable
     protected $casts = [
         'password' => 'hashed', // Cast password as hashed
     ];
-
-    /**
-     * Get the user type associated with the user.
-     */
-    public function userType()
-    {
-        return $this->belongsTo(UserType::class, 'user_type_id', 'id');
-    }
 
     /**
      * Get the appointments for the user (if they are a patient).

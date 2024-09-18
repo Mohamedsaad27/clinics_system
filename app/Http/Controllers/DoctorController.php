@@ -14,14 +14,14 @@ class DoctorController extends Controller
     protected $doctorRepository;
     public function __construct(DoctorRepositoryInterface $doctorRepository)
     {
-        $this->$doctorRepository = $doctorRepository;
+        $this->doctorRepository = $doctorRepository;
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-      return $this->doctorRepository->index();
+        return $this->doctorRepository->index();
     }
 
     /**
@@ -29,7 +29,7 @@ class DoctorController extends Controller
      */
     public function create()
     {
-       return $this->doctorRepository->create();
+        return $this->doctorRepository->create();
     }
 
     /**
