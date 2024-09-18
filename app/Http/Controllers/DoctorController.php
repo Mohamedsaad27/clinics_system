@@ -29,18 +29,15 @@ class DoctorController extends Controller
      */
     public function create()
     {
-        $data = $this->doctorService->create();
-        return view('admin.doctors.create',compact('data'));
+       return $this->doctorRepository->create();
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreDoctorRequest $request)
     {
-//        dd($request->all());
-        $this->doctorService->store($request);
-        return redirect()->route('admin.doctors.index')->with('success', 'Doctor created successfully');
+        return $this->doctorRepository->store($request);
     }
 
     /**
