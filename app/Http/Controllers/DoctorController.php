@@ -2,25 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\DoctorRepositoryInterface;
 use App\Models\Doctor;
+use App\Repositories\DoctorRepository;
 use Illuminate\Http\Request;
 use App\Services\DoctorService;
 use App\Http\Requests\Doctor\StoreDoctorRequest;
 
 class DoctorController extends Controller
 {
-    protected $doctorService;
-    public function __construct(DoctorService $doctorService)
+    protected $doctorRepository;
+    public function __construct(DoctorRepositoryInterface $doctorRepository)
     {
-        $this->doctorService = $doctorService;
+        $this->$doctorRepository = $doctorRepository;
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $doctors = $this->doctorService->index();
-        return view('admin.doctors.index',compact('doctors'));
+      return $this->doctorRepository->index();
     }
 
     /**
@@ -37,7 +38,7 @@ class DoctorController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+//        dd($request->all());
         $this->doctorService->store($request);
         return redirect()->route('admin.doctors.index')->with('success', 'Doctor created successfully');
     }

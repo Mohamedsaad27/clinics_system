@@ -17,46 +17,31 @@ class DoctorRepository implements DoctorRepositoryInterface
 {
     public function index()
     {
-        return Doctor::with('user', 'department', 'specialty')->get();
+        $doctors = Doctor::with('user', 'department', 'specialty')->get();
+        return view('doctors.index', compact('doctors'));
     }
     public function create()
     {
-        return [
-            'departments' => Department::all(),
-            'specialties' => Specialty::all(),
-        ];
+        $departments = Department::all();
+        $specialties = Specialty::all();
+
+        return view('doctors.create', compact('departments', 'specialties'));
     }
-    public function store(Request $request)
+
+    public function store(StoreDoctorRequest $storeDoctorRequest)
     {
-        $data = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'phone' => 'nullable|string|max:20|unique:users,phone',
-            'national_id' => 'nullable|string|max:20|unique:users,national_id',
-            'experience_years' => 'required|integer|min:0',
-            'qualification' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'gender' => 'nullable|in:male,female',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'department_id' => 'required|exists:departments,id',
-            'specialty_id' => 'required|exists:specialties,id',
-            'password' => 'required|string|min:8|confirmed', // Added password validation
-        ]);
-    
-        DB::beginTransaction();
-    
+        $data = $storeDoctorRequest->validated();
         try {
-            // Handle image
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
+            DB::beginTransaction();
+            if ($storeDoctorRequest->hasFile('image')) {
+                $image = $storeDoctorRequest->file('image');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
                 $image->move(public_path('doctors/images'), $imageName);
                 $data['image'] = $imageName;
             } else {
                 $data['image'] = 'default.png';
             }
-    
-            // Create User
+
             $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
@@ -67,7 +52,7 @@ class DoctorRepository implements DoctorRepositoryInterface
                 'user_type_id' => 1,
                 'image' => $data['image'],
             ]);
-    
+
             // Create Doctor
             Doctor::create([
                 'doctor_id' => $user->id,
@@ -76,14 +61,14 @@ class DoctorRepository implements DoctorRepositoryInterface
                 'department_id' => $data['department_id'],
                 'specialty_id' => $data['specialty_id'],
             ]);
-    
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e; // Handle errors
         }
     }
-    
+
     public function show(string $id)
     {
         // TODO: Implement show() method.
