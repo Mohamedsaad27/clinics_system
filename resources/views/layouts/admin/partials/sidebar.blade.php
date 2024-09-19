@@ -48,12 +48,24 @@
 
                 <li class="sidebar-item">
                     <a class="sidebar-link sidebar-link danger-hover-bg" href="./ui-alerts.html" aria-expanded="false">
-                        <span class="aside-icon p-2 bg-light-danger rounded-3">
-                            <i class="ti ti-alert-circle fs-7 text-danger"></i>
-                        </span>
-                        <span class="hide-menu ms-2 ps-1">Alerts</span>
+        <span class="aside-icon p-2 bg-light-danger rounded-3">
+            <i class="ti ti-alert-circle fs-7 text-danger"></i>
+        </span>
+                        <span class="hide-menu ms-2 ps-1">Employees</span>
                     </a>
+                    <!-- Add Employee Link -->
+                    <ul class="sidebar-submenu">
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" href="./add-employee.html">
+                <span class="aside-icon p-2 bg-light rounded-3">
+                    <i class="ti ti-user-plus fs-7"></i>
+                </span>
+                                <span class="hide-menu ms-2 ps-1">Add Employee</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
+
                 <li class="sidebar-item">
                     <a class="sidebar-link sidebar-link success-hover-bg" href="./ui-card.html" aria-expanded="false">
                         <span class="aside-icon p-2 bg-light-success rounded-3">
