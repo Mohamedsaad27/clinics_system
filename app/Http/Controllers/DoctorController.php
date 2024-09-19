@@ -53,7 +53,9 @@ class DoctorController extends Controller
      */
     public function edit(Doctor $doctor)
     {
-        //
+        $data = $this->doctorRepository->edit($doctor);
+
+        return view('admin.doctor.edit', $data);
     }
 
     /**
@@ -69,6 +71,15 @@ class DoctorController extends Controller
      */
     public function destroy(Doctor $doctor)
     {
-        //
+        try {
+            $this->doctorRepository->destroy($doctor);
+
+            return redirect()->route('doctors.index')->with('successDelete', 'Doctor and related data deleted successfully.');
+
+        } catch (\Exception $e) {
+
+            return redirect()->route('doctors.index')->with('errorDelete', "An error occurred while deleting the doctor :" . $e->getMessage());
+        }
     }
+
 }

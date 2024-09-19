@@ -9,6 +9,7 @@ class Specialty extends Model
 {
     use HasFactory;
     protected $fillable = ['name'];
+    
     // Define each specialty has many doctors
     public function doctors()
     {

@@ -4,9 +4,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Spike Free</title>
+    <title>Clinics System</title>
     <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
     <link rel="stylesheet" href="{{ asset('assets/css/dashboard/styles.min.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.css" />
 </head>
 
 <body>
@@ -39,6 +40,8 @@
     <script src="{{ asset('assets/libs/dashboard/js/apexcharts.min.js') }}"></script>
     <script src="{{ asset('assets/libs/dashboard/js/simplebar.js') }}"></script>
     <script src="{{ asset('assets/js/dashboard/dashboard.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js"></script>
+    @stack('scripts')
 </body>
 
 </html>

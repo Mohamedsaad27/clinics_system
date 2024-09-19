@@ -6,26 +6,28 @@ use App\Models\User;
 use App\Models\Doctor;
 use App\Models\Specialty;
 use App\Models\Department;
+use App\Models\UserAddress;
 use Illuminate\Support\Facades\Hash;
 use App\Interfaces\DoctorRepositoryInterface;
 use App\Http\Requests\Doctor\StoreDoctorRequest;
 use App\Http\Requests\Doctor\UpdateDoctorRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Storage;
 
 class DoctorRepository implements DoctorRepositoryInterface
 {
     public function index()
     {
-        $doctors = Doctor::with('user', 'department', 'specialty')->get();
-        return view('admin.doctor.create', compact('doctors'));
+        $doctors = Doctor::with('user.userAddresses', 'department', 'specialty')->get();
+        return view('admin.doctor.index', compact('doctors'));
     }
     public function create()
     {
         $departments = Department::all();
         $specialties = Specialty::all();
 
-        return view('doctors.create', compact('departments', 'specialties'));
+        return view('admin.doctor.create', compact('departments', 'specialties'));
     }
 
     public function store(StoreDoctorRequest $storeDoctorRequest)
@@ -35,22 +37,30 @@ class DoctorRepository implements DoctorRepositoryInterface
             DB::beginTransaction();
             if ($storeDoctorRequest->hasFile('image')) {
                 $image = $storeDoctorRequest->file('image');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('doctors/images'), $imageName);
+                $imageName = 'assets/imgs/doctors/' . time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('assets/imgs/doctors'), $imageName);
                 $data['image'] = $imageName;
             } else {
-                $data['image'] = 'default.png';
+                $data['image'] = null;
             }
 
+            // Create User Doctor
             $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'phone' => $data['phone'],
                 'national_id' => $data['national_id'],
                 'gender' => $data['gender'],
-                'password' => Hash::make($data['password']),
-                'user_type_id' => 1,
+                'password' => $data['password'],
+                'type' => 'doctor',
                 'image' => $data['image'],
+            ]);
+
+            // Create Address User
+            UserAddress::create([
+                'user_id' => $user->id,
+                'city' => $data['city'],
+                'country' => $data['country']
             ]);
 
             // Create Doctor
@@ -63,6 +73,8 @@ class DoctorRepository implements DoctorRepositoryInterface
             ]);
 
             DB::commit();
+
+            return redirect()->route('doctors.index')->with(['successCreate' => 'Doctor Created Successfully']);
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e; // Handle errors
@@ -73,16 +85,62 @@ class DoctorRepository implements DoctorRepositoryInterface
     {
         // TODO: Implement show() method.
     }
-    public function edit(string $id)
+    public function edit(Doctor $doctor)
     {
-        // TODO: Implement edit() method.
+        // Load related data
+        $doctor->load('user.userAddresses', 'department', 'specialty');
+
+        // Retrieve all departments and specialties
+        $departments = Department::all();
+        $specialties = Specialty::all();
+
+        // Return an array with the doctor and additional data
+        return [
+            'doctor' => $doctor,
+            'departments' => $departments,
+            'specialties' => $specialties,
+        ];
     }
+
     public function update(UpdateDoctorRequest $updateDoctorRequest, string $id)
     {
         // TODO: Implement update() method.
     }
-    public function destroy(string $id)
+    public function destroy(Doctor $doctor)
     {
-        // TODO: Implement destroy() method.
+        // Begin a transaction to ensure data consistency
+        \DB::beginTransaction();
+
+        try {
+            // Delete the row in the doctor table
+            $doctor->delete();
+
+            if ($doctor->user) {
+                // Delete the user image if it exists
+                if ($doctor->user->image) {
+                    if (Storage::exists($doctor->user->image)) {
+                        Storage::delete($doctor->user->image);
+                    }
+                }
+
+                // Delete the related user addresses
+                if ($doctor->user->userAddresses) {
+                    foreach ($doctor->user->userAddresses as $address) {
+                        $address->delete();
+                    }
+                }
+
+                // Delete the user record
+                $doctor->user->delete();
+            }
+
+            // Commit the transaction
+            \DB::commit();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
+
 }

@@ -41,7 +41,7 @@
                     </a>
                     <ul class="collapse list-unstyled ms-21" id="homeSubmenu">
                         <li>
-                            <a class="text-dark" href="{{ route('doctors.index') }}">Add Doctor</a>
+                            <a class="text-dark" href="{{ route('doctors.create') }}">Add Doctor</a>
                         </li>
                     </ul>
                 </li>

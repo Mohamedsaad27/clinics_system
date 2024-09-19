@@ -20,9 +20,9 @@ class User extends Authenticatable
         'email',
         'phone',
         'national_id',
-        'user_type_id',
         'image',
         'gender',
+        'type',
         'password',
     ];
 
@@ -41,6 +41,10 @@ class User extends Authenticatable
         'password' => 'hashed', // Cast password as hashed
     ];
 
+    public function userAddresses()
+    {
+        return $this->hasMany(UserAddress::class);
+    }
     /**
      * Get the appointments for the user (if they are a patient).
      */
@@ -63,5 +67,21 @@ class User extends Authenticatable
     public function doctor()
     {
         return $this->hasOne(Doctor::class, 'user_id', 'id');
+    }
+
+    public function getImageUrlAttribute()
+    {
+        if ($this->image == null) {
+            return 'https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png';
+        }
+        return $this->image;
+    }
+
+    public function getGenderAttribute($value)
+    {
+        if ($value == null) {
+            return 'Not selected';
+        }
+        return $value;
     }
 }
