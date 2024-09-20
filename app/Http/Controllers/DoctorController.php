@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\DoctorRepositoryInterface;
 use App\Models\Doctor;
-use App\Repositories\DoctorRepository;
 use Illuminate\Http\Request;
 use App\Services\DoctorService;
+use App\Repositories\DoctorRepository;
+use App\Interfaces\DoctorRepositoryInterface;
 use App\Http\Requests\Doctor\StoreDoctorRequest;
+use App\Http\Requests\Doctor\UpdateDoctorRequest;
 
 class DoctorController extends Controller
 {
@@ -61,9 +62,9 @@ class DoctorController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Doctor $doctor)
+    public function update(UpdateDoctorRequest $request, Doctor $doctor)
     {
-        //
+        return $this->doctorRepository->update($request, $doctor);
     }
 
     /**

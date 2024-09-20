@@ -14,6 +14,6 @@ interface DoctorRepositoryInterface
     public function store(StoreDoctorRequest $storeDoctorRequest);
     public function show(string $id);
     public function edit(Doctor $doctor);
-    public function update(UpdateDoctorRequest $updateDoctorRequest, string $id);
+    public function update(UpdateDoctorRequest $updateDoctorRequest,Doctor $doctor);
     public function destroy(Doctor $doctor);
 }

@@ -25,6 +25,13 @@
                     message: '{{ Session::get('errorDelete') }}',
                 });
             @endif
+                @if (Session::has('successUpdate'))
+                iziToast.success({
+                    title: 'Success',
+                    position: 'topRight',
+                    message: '{{ Session::get('successUpdate') }}',
+                });
+            @endif
         </script>
     @endpush
 
@@ -130,9 +137,7 @@
                                                 </td>
                                                 <td>
                                                     <p class="fs-3 fw-normal mb-0">
-                                                        @foreach ($doctor->user->userAddresses as $address)
-                                                            {{ $address->is_main == true ? $address->city | $address->country : '' }}
-                                                        @endforeach
+                                                        {{ $doctor->user->userAddresses->first()->city }}, {{ $doctor->user->userAddresses->first()->country }}
                                                     </p>
                                                 </td>
                                                 <td>

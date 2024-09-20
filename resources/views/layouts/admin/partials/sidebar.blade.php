@@ -43,6 +43,9 @@
                         <li>
                             <a class="text-dark" href="{{ route('doctors.create') }}">Add Doctor</a>
                         </li>
+                        <li>
+                            <a class="text-dark" href="{{ route('doctors.index') }}">Doctor List</a>
+                        </li>
                     </ul>
                 </li>
 

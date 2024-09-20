@@ -13,7 +13,7 @@ use App\Http\Requests\Doctor\StoreDoctorRequest;
 use App\Http\Requests\Doctor\UpdateDoctorRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Storage;
+use Illuminate\Support\Facades\Storage;
 
 class DoctorRepository implements DoctorRepositoryInterface
 {
@@ -102,10 +102,70 @@ class DoctorRepository implements DoctorRepositoryInterface
         ];
     }
 
-    public function update(UpdateDoctorRequest $updateDoctorRequest, string $id)
+    public function update(UpdateDoctorRequest $updateDoctorRequest, Doctor $doctor)
     {
-        // TODO: Implement update() method.
+        try {
+            DB::beginTransaction();
+            $data = $updateDoctorRequest->validated();
+            dd($data);
+            if ($updateDoctorRequest->hasFile('image')) {
+                $image = $updateDoctorRequest->file('image');
+                $imageName = 'assets/imgs/doctors/' . time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('assets/imgs/doctors'), $imageName);
+                $data['image'] = $imageName;
+    
+                // Delete old image if exists
+                if ($doctor->user->image) {
+                    if (Storage::exists($doctor->user->image)) {
+                        Storage::delete($doctor->user->image);
+                    }
+                }
+            } else {
+                $data['image'] = $doctor->user->image;
+            }
+    
+            // Update user data
+            $doctor->user->update([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'],
+                'national_id' => $data['national_id'],
+                'gender' => $data['gender'],
+                'image' => $data['image'],
+            ]);
+             
+            $userAddress = $doctor->user->userAddresses()->first();
+            if ($userAddress) {
+                $userAddress->update([
+                    'city' => $data['city'],
+                    'country' => $data['country'],
+                ]);
+            } else {
+                UserAddress::create([
+                    'user_id' => $doctor->user->id,
+                    'city' => $data['city'],
+                    'country' => $data['country'],
+                ]);
+            }
+    
+        
+            // Update doctor data
+            $doctor->update([
+                'experience_years' => $data['experience_years'],
+                'qualification' => $data['qualification'],
+                'department_id' => $data['department_id'],
+                'specialty_id' => $data['specialty_id'],
+            ]);
+    
+            DB::commit();
+    
+            return redirect()->route('doctors.index')->with(['successUpdate' => 'Doctor updated successfully']);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
+    
     public function destroy(Doctor $doctor)
     {
         // Begin a transaction to ensure data consistency
