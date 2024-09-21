@@ -50,21 +50,21 @@
                 </li>
 
                 <li class="sidebar-item">
-                    <a class="sidebar-link sidebar-link danger-hover-bg" href="./ui-alerts.html" aria-expanded="false">
-        <span class="aside-icon p-2 bg-light-danger rounded-3">
-            <i class="ti ti-alert-circle fs-7 text-danger"></i>
-        </span>
-                        <span class="hide-menu ms-2 ps-1">Employees</span>
+                    <a class="dropdown-toggle justify-content-between pe-4 sidebar-link sidebar-link primary-hover-bg {{ $currentRoute == 'admin.dashboard' ? 'primary-bg' : '' }}"
+                        data-bs-toggle="collapse" data-bs-target="#employeeSubmenu" aria-expanded="false">
+                        <div class="d-flex align-items-center">
+                            <span class="aside-icon p-2 bg-light-warning rounded-3">
+                                <i class="ti ti-users fs-7 text-warning"></i>
+                            </span>
+                            <span class="hide-menu ms-2 ps-1">Employee</span>
+                        </div>
                     </a>
-                    <!-- Add Employee Link -->
-                    <ul class="sidebar-submenu">
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="./add-employee.html">
-                <span class="aside-icon p-2 bg-light rounded-3">
-                    <i class="ti ti-user-plus fs-7"></i>
-                </span>
-                                <span class="hide-menu ms-2 ps-1">Add Employee</span>
-                            </a>
+                    <ul class="collapse list-unstyled ms-21" id="employeeSubmenu">
+                        <li>
+                            <a class="text-dark" href="{{ route('employees.create') }}">Add Employee</a>
+                        </li>
+                        <li>
+                            <a class="text-dark" href="{{ route('employees.index') }}">Employee List</a>
                         </li>
                     </ul>
                 </li>

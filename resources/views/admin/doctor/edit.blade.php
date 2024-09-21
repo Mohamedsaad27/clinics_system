@@ -3,7 +3,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title fw-semibold mb-4">Add New Doctor</h5>
+                <h5 class="card-title fw-semibold mb-4">Edit Doctor</h5>
                 <form class="row" action="{{ route('doctors.update', $doctor->id) }}" method="POST"
                     enctype="multipart/form-data">
                     @method('PUT')
@@ -12,7 +12,7 @@
 
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="name" class="form-control" name="name" id="name"
+                            <input type="text" class="form-control" name="name" id="name"
                                 value="{{ $doctor->user->name }}">
                             @error('name')
                                 <div class="form-text text-danger">
@@ -21,16 +21,12 @@
                             @enderror
                         </div>
 
-                        
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password"
-                                value="">
+                            <input type="password" class="form-control" id="password" name="password">
                             @error('password')
                                 <div class="form-text text-danger">
-                                    <div class="form-text text-danger">
-                                        {{ $message }}
-                                    </div>
+                                    {{ $message }}
                                 </div>
                             @enderror
                         </div>
@@ -41,22 +37,17 @@
                                 value="{{ $doctor->user->national_id }}">
                             @error('national_id')
                                 <div class="form-text text-danger">
-                                    <div class="form-text text-danger">
-                                        {{ $message }}
-                                    </div>
+                                    {{ $message }}
                                 </div>
                             @enderror
                         </div>
 
                         <div class="mb-3">
                             <label for="image" class="form-label">Profile Image</label>
-                            <input type="file" class="form-control" id="image" name="image"
-                                value="{{ $doctor->user->image_url }}">
+                            <input type="file" class="form-control" id="image" name="image">
                             @error('image')
                                 <div class="form-text text-danger">
-                                    <div class="form-text text-danger">
-                                        {{ $message }}
-                                    </div>
+                                    {{ $message }}
                                 </div>
                             @enderror
                         </div>
@@ -67,9 +58,7 @@
                                 value="{{ $doctor->qualification }}">
                             @error('qualification')
                                 <div class="form-text text-danger">
-                                    <div class="form-text text-danger">
-                                        {{ $message }}
-                                    </div>
+                                    {{ $message }}
                                 </div>
                             @enderror
                         </div>
@@ -81,18 +70,14 @@
                             <label for="specialty_id" class="form-label">Specialty</label>
                             <select class="form-select" id="specialty_id" name="specialty_id">
                                 <option value="">Select a specialty</option>
-                                @forelse($specialties as $specialty)
+                                @foreach($specialties as $specialty)
                                     <option value="{{ $specialty->id }}" @selected($specialty->id == $doctor->specialty_id)>
                                         {{ $specialty->name }}</option>
-                                @empty
-                                    <option value="">There is no specialization</option>
-                                @endforelse
+                                @endforeach
                             </select>
                             @error('specialty_id')
                                 <div class="form-text text-danger">
-                                    <div class="form-text text-danger">
-                                        {{ $message }}
-                                    </div>
+                                    {{ $message }}
                                 </div>
                             @enderror
                         </div>
@@ -101,18 +86,14 @@
                             <label for="department_id" class="form-label">Department</label>
                             <select class="form-select" id="department_id" name="department_id">
                                 <option value="">Select a department</option>
-                                @forelse($departments as $department)
+                                @foreach($departments as $department)
                                     <option value="{{ $department->id }}" @selected($department->id == $doctor->department_id)>
                                         {{ $department->name }}</option>
-                                @empty
-                                    <option value="">There is no Departments</option>
-                                @endforelse
+                                @endforeach
                             </select>
                             @error('department_id')
                                 <div class="form-text text-danger">
-                                    <div class="form-text text-danger">
-                                        {{ $message }}
-                                    </div>
+                                    {{ $message }}
                                 </div>
                             @enderror
                         </div>
@@ -126,9 +107,7 @@
                             </select>
                             @error('gender')
                                 <div class="form-text text-danger">
-                                    <div class="form-text text-danger">
-                                        {{ $message }}
-                                    </div>
+                                    {{ $message }}
                                 </div>
                             @enderror
                         </div>
@@ -139,9 +118,7 @@
                                 value="{{ $doctor->user->phone }}">
                             @error('phone')
                                 <div class="form-text text-danger">
-                                    <div class="form-text text-danger">
-                                        {{ $message }}
-                                    </div>
+                                    {{ $message }}
                                 </div>
                             @enderror
                         </div>
@@ -152,9 +129,7 @@
                                 min="0" value="{{ $doctor->experience_years }}">
                             @error('experience_years')
                                 <div class="form-text text-danger">
-                                    <div class="form-text text-danger">
-                                        {{ $message }}
-                                    </div>
+                                    {{ $message }}
                                 </div>
                             @enderror
                         </div>
@@ -166,9 +141,7 @@
                                     value="{{ $doctor->user->userAddresses->first()->city }}">
                                 @error('city')
                                     <div class="form-text text-danger">
-                                        <div class="form-text text-danger">
-                                            {{ $message }}
-                                        </div>
+                                        {{ $message }}
                                     </div>
                                 @enderror
                             </div>
@@ -178,18 +151,18 @@
                                     value="{{ $doctor->user->userAddresses->first()->country }}">
                                 @error('country')
                                     <div class="form-text text-danger">
-                                        <div class="form-text text-danger">
-                                            {{ $message }}
-                                        </div>
+                                        {{ $message }}
                                     </div>
                                 @enderror
                             </div>
                         </div>
 
+                       
+
                     </div>
 
                     <div class="mt-3">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                 </form>
             </div>

@@ -17,6 +17,11 @@ return new class extends Migration {
         });
         Schema::table('doctors', function (Blueprint $table) {
             $table->foreignId('department_id')->constrained('departments')->after('specialty_id');
+            $table->index('department_id');
+        });
+        Schema::table('employees', function (Blueprint $table) {
+            $table->foreignId('department_id')->constrained('departments')->after('role');
+            $table->index('department_id');
         });
     }
 

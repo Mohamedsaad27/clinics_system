@@ -83,7 +83,8 @@ class DoctorRepository implements DoctorRepositoryInterface
 
     public function show(string $id)
     {
-        // TODO: Implement show() method.
+        $doctor = Doctor::with('user.userAddresses', 'department', 'specialty')->find($id);
+        return view('admin.doctor.show', compact('doctor'));
     }
     public function edit(Doctor $doctor)
     {
@@ -101,101 +102,71 @@ class DoctorRepository implements DoctorRepositoryInterface
             'specialties' => $specialties,
         ];
     }
-
     public function update(UpdateDoctorRequest $updateDoctorRequest, Doctor $doctor)
     {
+        $data = $updateDoctorRequest->validated();
+
         try {
             DB::beginTransaction();
-            $data = $updateDoctorRequest->validated();
-            dd($data);
-            if ($updateDoctorRequest->hasFile('image')) {
-                $image = $updateDoctorRequest->file('image');
-                $imageName = 'assets/imgs/doctors/' . time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('assets/imgs/doctors'), $imageName);
-                $data['image'] = $imageName;
-    
-                // Delete old image if exists
-                if ($doctor->user->image) {
-                    if (Storage::exists($doctor->user->image)) {
-                        Storage::delete($doctor->user->image);
-                    }
-                }
-            } else {
-                $data['image'] = $doctor->user->image;
-            }
-    
-            // Update user data
-            $doctor->user->update([
+
+            $user = $doctor->user;
+            $user->update([
                 'name' => $data['name'],
-                'email' => $data['email'],
                 'phone' => $data['phone'],
                 'national_id' => $data['national_id'],
                 'gender' => $data['gender'],
-                'image' => $data['image'],
             ]);
-             
-            $userAddress = $doctor->user->userAddresses()->first();
-            if ($userAddress) {
-                $userAddress->update([
-                    'city' => $data['city'],
-                    'country' => $data['country'],
-                ]);
-            } else {
-                UserAddress::create([
-                    'user_id' => $doctor->user->id,
-                    'city' => $data['city'],
-                    'country' => $data['country'],
-                ]);
+
+            if (isset($data['password'])) {
+                $user->update(['password' => Hash::make($data['password'])]);
             }
-    
-        
-            // Update doctor data
+
+            if ($updateDoctorRequest->hasFile('image')) {
+                if ($user->image && Storage::exists($user->image)) {
+                    Storage::delete($user->image);
+                }
+                $image = $updateDoctorRequest->file('image');
+                $imageName = 'assets/imgs/doctors/' . time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('assets/imgs/doctors'), $imageName);
+                $user->update(['image' => $imageName]);
+            }
+            $user->userAddresses()->update([
+                'city' => $data['city'],
+                'country' => $data['country']
+            ]);
             $doctor->update([
                 'experience_years' => $data['experience_years'],
                 'qualification' => $data['qualification'],
                 'department_id' => $data['department_id'],
                 'specialty_id' => $data['specialty_id'],
             ]);
-    
             DB::commit();
-    
-            return redirect()->route('doctors.index')->with(['successUpdate' => 'Doctor updated successfully']);
+
+            return ['successUpdate' => 'Doctor Updated Successfully'];
         } catch (\Exception $e) {
             DB::rollBack();
             throw $e;
         }
     }
-    
     public function destroy(Doctor $doctor)
     {
-        // Begin a transaction to ensure data consistency
-        \DB::beginTransaction();
-
+        DB::beginTransaction();
         try {
-            // Delete the row in the doctor table
             $doctor->delete();
-
             if ($doctor->user) {
-                // Delete the user image if it exists
                 if ($doctor->user->image) {
                     if (Storage::exists($doctor->user->image)) {
                         Storage::delete($doctor->user->image);
                     }
                 }
-
-                // Delete the related user addresses
                 if ($doctor->user->userAddresses) {
                     foreach ($doctor->user->userAddresses as $address) {
                         $address->delete();
                     }
                 }
-
-                // Delete the user record
                 $doctor->user->delete();
             }
-
-            // Commit the transaction
-            \DB::commit();
+            DB::commit();
 
         } catch (\Exception $e) {
             DB::rollBack();

@@ -24,13 +24,14 @@ require __DIR__ . '/auth.php';
 Route::group(
     [
         'middleware',
-        'prefix' => 'admin',
+        'prefix' => 'admin' ,
     ],
     function () {
 
         //--------------------------------/* Resource Routes Doctor */--------------------------------
 
         Route::resource('/doctors', DoctorController::class);
+        Route::resource('/employees', EmployeeController::class);
 
     }
 );

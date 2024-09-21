@@ -64,7 +64,12 @@ class DoctorController extends Controller
      */
     public function update(UpdateDoctorRequest $request, Doctor $doctor)
     {
-        return $this->doctorRepository->update($request, $doctor);
+        try {
+            $result = $this->doctorRepository->update($request, $doctor);
+            return redirect()->route('doctors.index')->with(['successUpdate' => 'Doctor Updated Successfully']);
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with(['errorUpdate' => 'An error occurred while updating the doctor: ' . $e->getMessage()]);
+        }
     }
 
     /**

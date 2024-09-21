@@ -15,4 +15,10 @@ class Department extends Model
     {
         return $this->hasMany(Doctor::class);
     }
+
+    // Define each department has many employees
+    public function employees()
+    {
+        return $this->hasMany(Employee::class);
+    }
 }

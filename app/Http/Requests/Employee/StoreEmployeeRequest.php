@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Doctor;
+namespace App\Http\Requests\Employee;
 
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateDoctorRequest extends FormRequest
+class StoreEmployeeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,15 +23,16 @@ class UpdateDoctorRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'phone' => 'required|string|max:255',
-            'national_id' => 'required|string|max:255',
-            'gender' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'password' => 'nullable|string|min:8',
+            'email' => 'required|string|email|max:255|unique:users',
+            'phone' => 'required|string|max:20',
+            'national_id' => 'required|string|max:20|unique:users',
+            'gender' => 'required|in:male,female,other',
             'department_id' => 'required|exists:departments,id',
-            'specialty_id' => 'required|exists:specialties,id',
-            'experience_years' => 'required|string|max:255',
-            'qualification' => 'required|string|max:255',
+            'role' => 'required|in:nurse,receptionist',
+            'hire_date' => 'required|date',
+            'salary' => 'required|numeric|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'password' => 'required|string|min:8|confirmed',
             'city' => 'required|string|max:255',
             'country' => 'required|string|max:255',
         ];
