@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\ProfileController;
@@ -24,22 +25,23 @@ require __DIR__ . '/auth.php';
 Route::group(
     [
         'middleware',
-        'prefix' => 'admin' ,
+        'prefix' => 'admin',
     ],
     function () {
 
         //--------------------------------/* Resource Routes Doctor */--------------------------------
-
+    
         Route::resource('/doctors', DoctorController::class);
         Route::resource('/employees', EmployeeController::class);
+        Route::resource('/patients', PatientController::class);
 
     }
 );
 
 Route::prefix('admin')->as('admin.')->group(function () {
-   Route::prefix('employees')->as('employees.')->group(function () {
-      Route::resource('/employees', EmployeeController::class);
-   });
+    Route::prefix('employees')->as('employees.')->group(function () {
+        Route::resource('/employees', EmployeeController::class);
+    });
 });
 
 Route::post('/doctors', [DoctorController::class, 'store'])->name('doctors.store');

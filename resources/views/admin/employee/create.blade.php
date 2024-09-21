@@ -1,4 +1,6 @@
 <x-admin-layout>
+    
+    {{-- Start Breadcrumb --}}
     <div class="card bg-light-info shadow-none position-relative overflow-hidden">
         <div class="card-body px-4 py-3">
             <div class="row align-items-center">
@@ -12,14 +14,11 @@
                         </ol>
                     </nav>
                 </div>
-                <div class="col-3">
-                    <div class="text-center mb-n5">
-                        <img src="{{ asset('assets/images/breadcrumb/ChatBc.png') }}" alt="" class="img-fluid mb-n4">
-                    </div>
-                </div>
             </div>
         </div>
     </div>
+    {{-- End Breadcrumb --}}
+
     <div class="card">
         <div class="card-body">
             <form action="{{ route('employees.store') }}" method="POST" enctype="multipart/form-data">

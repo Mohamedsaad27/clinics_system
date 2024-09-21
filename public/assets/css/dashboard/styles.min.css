@@ -20987,7 +20987,23 @@ ul {
     border: 2px solid #0085db
 }
 
-.border-0{
+.border-0 {
     border: none;
 }
 
+.submenu li {
+    border-radius: 7px;
+    transition: .2s;
+}
+
+.submenu .active  {
+    background-color: #e8e8e8;
+    color: #0085db !important;
+    border-radius: 7px;
+}
+
+.submenu li:hover {
+    background-color: #e8e8e8;
+    color: #0085db !important;
+    border-radius: 7px;
+}

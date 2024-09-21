@@ -19,7 +19,7 @@ class DoctorRepository implements DoctorRepositoryInterface
 {
     public function index()
     {
-        $doctors = Doctor::with('user.userAddresses', 'department', 'specialty')->get();
+        $doctors = Doctor::with('user.userAddresses', 'department', 'specialty')->paginate(5);
         return view('admin.doctor.index', compact('doctors'));
     }
     public function create()
@@ -105,7 +105,6 @@ class DoctorRepository implements DoctorRepositoryInterface
     public function update(UpdateDoctorRequest $updateDoctorRequest, Doctor $doctor)
     {
         $data = $updateDoctorRequest->validated();
-
         try {
             DB::beginTransaction();
 

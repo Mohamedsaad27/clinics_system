@@ -39,12 +39,12 @@
                             <span class="hide-menu ms-2 ps-1">Doctor</span>
                         </div>
                     </a>
-                    <ul class="collapse list-unstyled ms-21" id="homeSubmenu">
-                        <li>
-                            <a class="text-dark" href="{{ route('doctors.create') }}">Add Doctor</a>
+                    <ul class="submenu collapse list-unstyled ms-21 me-5" id="homeSubmenu">
+                        <li class="py-2 mb-1">
+                            <a class="text-dark p-2" href="{{ route('doctors.create') }}">Add Doctor</a>
                         </li>
-                        <li>
-                            <a class="text-dark" href="{{ route('doctors.index') }}">Doctor List</a>
+                        <li class="py-2 mb-1">
+                            <a class="text-dark p-2" href="{{ route('doctors.index') }}">Doctor List</a>
                         </li>
                     </ul>
                 </li>
@@ -53,18 +53,38 @@
                     <a class="dropdown-toggle justify-content-between pe-4 sidebar-link sidebar-link primary-hover-bg {{ $currentRoute == 'admin.dashboard' ? 'primary-bg' : '' }}"
                         data-bs-toggle="collapse" data-bs-target="#employeeSubmenu" aria-expanded="false">
                         <div class="d-flex align-items-center">
-                            <span class="aside-icon p-2 bg-light-warning rounded-3">
+                            <span class="aside-icon p-2 bg-light-primary rounded-3">
                                 <i class="ti ti-users fs-7 text-warning"></i>
                             </span>
                             <span class="hide-menu ms-2 ps-1">Employee</span>
                         </div>
                     </a>
-                    <ul class="collapse list-unstyled ms-21" id="employeeSubmenu">
-                        <li>
-                            <a class="text-dark" href="{{ route('employees.create') }}">Add Employee</a>
+                    <ul class="submenu collapse list-unstyled ms-21 me-5" id="employeeSubmenu">
+                        <li class="py-2 mb-1">
+                            <a class="text-dark p-2" href="{{ route('employees.create') }}">Add Employee</a>
                         </li>
-                        <li>
-                            <a class="text-dark" href="{{ route('employees.index') }}">Employee List</a>
+                        <li class="py-2 mb-1">
+                            <a class="text-dark p-2" href="{{ route('employees.index') }}">Employee List</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-item">
+                    <a class="dropdown-toggle justify-content-between pe-4 sidebar-link sidebar-link primary-hover-bg {{ $currentRoute == 'admin.dashboard' ? 'primary-bg' : '' }}"
+                        data-bs-toggle="collapse" data-bs-target="#patientsSubmenu" aria-expanded="false">
+                        <div class="d-flex align-items-center">
+                            <span class="aside-icon p-2 bg-light-primary rounded-3">
+                                <i class="ti ti-users fs-7 text-warning"></i>
+                            </span>
+                            <span class="hide-menu ms-2 ps-1">Patients</span>
+                        </div>
+                    </a>
+                    <ul class="submenu collapse list-unstyled ms-21 me-5" id="patientsSubmenu">
+                        <li class="py-2 mb-1">
+                            <a class="text-dark p-2" href="{{ route('patients.create') }}">Add Patients</a>
+                        </li>
+                        <li class="py-2 mb-1">
+                            <a class="text-dark p-2" href="{{ route('patients.index') }}">Patient List</a>
                         </li>
                     </ul>
                 </li>

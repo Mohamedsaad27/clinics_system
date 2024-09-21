@@ -25,7 +25,7 @@
                     message: '{{ Session::get('errorDelete') }}',
                 });
             @endif
-                @if (Session::has('successUpdate'))
+            @if (Session::has('successUpdate'))
                 iziToast.success({
                     title: 'Success',
                     position: 'topRight',
@@ -47,156 +47,173 @@
         </script>
     @endpush
 
-    <div class="card-body p-4">
-        <div class="d-flex mb-4 justify-content-between align-items-center">
-            <h5 class="mb-0 fw-bold">Show Doctors</h5>
-
-            <div class="dropdown">
-                <button id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"
-                    class="rounded-circle btn-transparent btn-sm px-1 btn shadow-none">
-                    <i class="ti ti-dots-vertical fs-7 d-block"></i>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1" style="">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li>
-                        <a class="dropdown-item" href="#">Another action</a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </li>
-                </ul>
+    {{-- Start Bredcrump --}}
+    <div class="card bg-light-info shadow-none position-relative overflow-hidden">
+        <div class="card-body px-4 py-3">
+            <div class="row align-items-center">
+                <div class="col-9">
+                    <h4 class="fw-semibold mb-8">Doctor List</h4>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a class="text-muted"
+                                    href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item" aria-current="page">Doctor List</li>
+                        </ol>
+                    </nav>
+                </div>
             </div>
         </div>
+    </div>
+    {{-- End Bredcrump --}}
 
-        <div class="table-responsive" data-simplebar="init">
-            <div class="simplebar-wrapper" style="margin: 0px;">
-                <div class="simplebar-height-auto-observer-wrapper">
-                    <div class="simplebar-height-auto-observer"></div>
+    <div class="widget-content searchable-container list">
+        <!-- --------------------- start Contact ---------------- -->
+        <div class="card card-body">
+            <div class="row">
+                <div class="col-md-4 col-xl-3">
+                    <form class="position-relative">
+                        <input type="text" class="form-control product-search ps-5" id="input-search"
+                            placeholder="Search Doctors...">
+                        <i
+                            class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
+                    </form>
                 </div>
-                <div class="simplebar-mask">
-                    <div class="simplebar-offset" style="right: 0px; bottom: 0px; overflow:auto;">
-                        <div class="simplebar-content-wrapper" style="overflow: vis;" tabindex="0" role="region"
-                            aria-label="scrollable content" style="height: auto;">
-                            <div class="simplebar-content" style="padding: 0px;">
-                                <table class="table table-borderless align-middle text-nowrap">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Email</th>
-                                            <th scope="col">National ID</th>
-                                            <th scope="col">Qualification</th>
-                                            <th scope="col">Specialty</th>
-                                            <th scope="col">Department</th>
-                                            <th scope="col">Gender</th>
-                                            <th scope="col">Phone</th>
-                                            <th scope="col">Years of Experience</th>
-                                            <th scope="col">Address</th>
-                                            <th scope="col">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse($doctors as $doctor)
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="me-2">
-                                                            <img src="{{ asset($doctor->user->image_url) }}"
-                                                                width="50" class="rounded-circle" alt="">
-                                                        </div>
-
-                                                        <div>
-                                                            <h6 class="mb-1 fw-bolder">{{ $doctor->user->name }}</h6>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <p class="fs-3 fw-normal mb-0">{{ $doctor->user->email }}</p>
-                                                </td>
-                                                <td>
-                                                    <p class="fs-3 fw-normal mb-0">
-                                                        {{ $doctor->user->national_id }}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="fs-3 fw-normal mb-0">
-                                                        {{ $doctor->qualification }}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="fs-3 fw-normal mb-0">
-                                                        {{ $doctor->specialty->name }}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="fs-3 fw-normal mb-0">
-                                                        {{ $doctor->department->name }}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="fs-3 fw-normal mb-0">
-                                                        {{ $doctor->user->gander }}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="fs-3 fw-normal mb-0">
-                                                        {{ $doctor->user->phone }}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="fs-3 fw-normal mb-0">
-                                                        {{ $doctor->experience_years }}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="fs-3 fw-normal mb-0">
-                                                        {{ $doctor->user->userAddresses->first()->city }}, {{ $doctor->user->userAddresses->first()->country }}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <div class="d-flex align-items-center justify-content-between">
-                                                        <form action="{{ route('doctors.destroy', $doctor->id) }}"
-                                                            method="POST">
-                                                            @method('DELETE')
-                                                            @csrf
-                                                            <button class="bg-transparent border-0 delete-doctor" type="button">
-                                                                <i class="ti ti-trash text-danger fs-6"></i>
-                                                            </button>
-                                                        </form>
-
-                                                        <form action="{{ route('doctors.edit', $doctor->id) }}"
-                                                            method="GET">
-                                                            <button class="bg-transparent border-0" type="submit"><i
-                                                                    class="ti ti-pencil text-blue fs-6"></i></button>
-                                                        </form>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="20">
-                                                    <p class="text-center">There are no doctors</p>
-                                                </td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                <div
+                    class="col-md-8 col-xl-9 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
+                    <a href="{{ route('doctors.create') }}" class="btn btn-info d-flex align-items-center">
+                        <i class="ti ti-users text-white me-1 fs-5"></i> Add Doctor
+                    </a>
                 </div>
-                <div class="simplebar-placeholder" style="width: auto; height: 357px;"></div>
             </div>
-            <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
-                <div class="simplebar-scrollbar" style="width: 0px; display: none;"></div>
+        </div>
+        <!-- --------------------- end Contact ---------------- -->
+
+        <div class="card card-body">
+            <div class="table-responsive">
+                <div id="zero_config_wrapper" class="dataTables_wrapper">
+                    <table id="zero_config" class="table border table-striped table-bordered text-nowrap dataTable"
+                        aria-describedby="zero_config_info">
+                        <thead>
+                            <!-- start row -->
+                            <tr>
+                                <th class="sorting" tabindex="0" aria-controls="zero_config" rowspan="1"
+                                    colspan="1" aria-label="Name: activate to sort column ascending"
+                                    style="width: 141.234px;">Name</th>
+                                <th class="sorting" tabindex="0" aria-controls="zero_config" rowspan="1"
+                                    colspan="1" aria-label="Email: activate to sort column ascending"
+                                    style="width: 141.234px;">Email</th>
+                                <th class="sorting" tabindex="0" aria-controls="zero_config" rowspan="1"
+                                    colspan="1" aria-label="National ID: activate to sort column ascending"
+                                    style="width: 141.234px;">National ID</th>
+                                <th class="sorting" tabindex="0" aria-controls="zero_config" rowspan="1"
+                                    colspan="1" aria-label="Qualification: activate to sort column ascending"
+                                    style="width: 141.234px;">Qualification</th>
+                                <th class="sorting" tabindex="0" aria-controls="zero_config" rowspan="1"
+                                    colspan="1" aria-label="Specialty: activate to sort column ascending"
+                                    style="width: 141.234px;">Specialty</th>
+                                <th class="sorting" tabindex="0" aria-controls="zero_config" rowspan="1"
+                                    colspan="1" aria-label="Department: activate to sort column ascending"
+                                    style="width: 141.234px;">Department</th>
+                                <th class="sorting" tabindex="0" aria-controls="zero_config" rowspan="1"
+                                    colspan="1" aria-label="Gender: activate to sort column ascending"
+                                    style="width: 141.234px;">Gender</th>
+                                <th class="sorting" tabindex="0" aria-controls="zero_config" rowspan="1"
+                                    colspan="1" aria-label="Phone: activate to sort column ascending"
+                                    style="width: 141.234px;">Phone</th>
+                                <th class="sorting" tabindex="0" aria-controls="zero_config" rowspan="1"
+                                    colspan="1" aria-label="Years of Experience: activate to sort column ascending"
+                                    style="width: 141.234px;">Years of Experience</th>
+                                <th class="sorting" tabindex="0" aria-controls="zero_config" rowspan="1"
+                                    colspan="1" aria-label="Address: activate to sort column ascending"
+                                    style="width: 141.234px;">Address</th>
+                                <th class="sorting" tabindex="0" aria-controls="zero_config" rowspan="1"
+                                    colspan="1" aria-label="Actions: activate to sort column ascending"
+                                    style="width: 70.8906px;">Actions</th>
+                            </tr>
+
+                            <!-- end row -->
+                        </thead>
+                        <tbody>
+                            @forelse($doctors as $doctor)
+                                <tr class="odd">
+                                    <td class="sorting_1">
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{ asset($doctor->user->image_url ?? 'assets/images/profile/user-1.jpg') }}"
+                                                alt="avatar" width="35" class="rounded-circle">
+                                            <div class="ms-3">
+                                                <h6 class="user-name mb-0">{{ $doctor->user->name }}</h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="usr-email-addr">{{ $doctor->user->email }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="usr-id">{{ $doctor->user->national_id }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="usr-qualification">{{ $doctor->qualification }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="usr-specialty">{{ $doctor->specialty->name }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="usr-department">{{ $doctor->department->name }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="usr-gender">{{ $doctor->user->gender }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="usr-phone">{{ $doctor->user->phone }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="usr-experience">{{ $doctor->experience_years }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="usr-address">
+                                            {{ $doctor->user->userAddresses->first()->city }},
+                                            {{ $doctor->user->userAddresses->first()->country }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="action-btn d-flex">
+                                            <a href="{{ route('doctors.edit', $doctor->id) }}"
+                                                class="text-primary edit me-2">
+                                                <i class="ti ti-edit fs-5"></i>
+                                            </a>
+                                            <form action="{{ route('doctors.destroy', $doctor->id) }}" method="POST"
+                                                class="d-inline">
+                                                @method('DELETE')
+                                                @csrf
+                                                <button class="bg-transparent border-0 delete-doctor p-0"
+                                                    type="button">
+                                                    <i class="ti ti-trash text-danger fs-6"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="11">
+                                        <p class="text-center">There are no doctors</p>
+                                    </td>
+                                </tr>
+                            @endforelse
+
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
-                <div class="simplebar-scrollbar" style="height: 0px; display: none;"></div>
+            <div class="d-flex justify-content-end mt-3">
+                {{-- {{ $employees->links('pagination::bootstrap-5') }} --}}
             </div>
         </div>
     </div>
 
     <!-- Delete Confirmation Modal -->
-    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

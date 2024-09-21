@@ -24,11 +24,20 @@
                     message: '{{ Session::get('errorDelete') }}',
                 });
             @endif
+
             @if (Session::has('successUpdate'))
                 iziToast.success({
                     title: 'Success',
                     position: 'topRight',
                     message: '{{ Session::get('successUpdate') }}',
+                });
+            @endif
+
+            @if (Session::has('errorUpdate'))
+                iziToast.error({
+                    title: 'Error',
+                    position: 'topRight',
+                    message: '{{ Session::get('errorUpdate') }}',
                 });
             @endif
 
@@ -52,12 +61,12 @@
         <div class="card-body px-4 py-3">
             <div class="row align-items-center">
                 <div class="col-9">
-                    <h4 class="fw-semibold mb-8">Employee List</h4>
+                    <h4 class="fw-semibold mb-8">Patient List</h4>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a class="text-muted"
                                     href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item" aria-current="page">Employee List</li>
+                            <li class="breadcrumb-item" aria-current="page">Patient List</li>
                         </ol>
                     </nav>
                 </div>
@@ -73,15 +82,15 @@
                 <div class="col-md-4 col-xl-3">
                     <form class="position-relative">
                         <input type="text" class="form-control product-search ps-5" id="input-search"
-                            placeholder="Search Employees...">
+                            placeholder="Search Patients...">
                         <i
                             class="ti ti-search position-absolute top-50 start-0 translate-middle-y fs-6 text-dark ms-3"></i>
                     </form>
                 </div>
                 <div
                     class="col-md-8 col-xl-9 text-end d-flex justify-content-md-end justify-content-center mt-3 mt-md-0">
-                    <a href="{{ route('employees.create') }}" class="btn btn-info d-flex align-items-center">
-                        <i class="ti ti-users text-white me-1 fs-5"></i> Add Employee
+                    <a href="{{ route('patients.create') }}" class="btn btn-info d-flex align-items-center">
+                        <i class="ti ti-users text-white me-1 fs-5"></i> Add Patient
                     </a>
                 </div>
             </div>
@@ -107,11 +116,11 @@
                                     colspan="1" aria-label="Phone: activate to sort column ascending"
                                     style="width: 141.234px;">Phone</th>
                                 <th class="sorting" tabindex="0" aria-controls="zero_config" rowspan="1"
-                                    colspan="1" aria-label="Department: activate to sort column ascending"
-                                    style="width: 141.234px;">Department</th>
+                                    colspan="1" aria-label="Phone: activate to sort column ascending"
+                                    style="width: 141.234px;">National ID</th>
                                 <th class="sorting" tabindex="0" aria-controls="zero_config" rowspan="1"
-                                    colspan="1" aria-label="Role: activate to sort column ascending"
-                                    style="width: 141.234px;">Role</th>
+                                    colspan="1" aria-label="Phone: activate to sort column ascending"
+                                    style="width: 141.234px;">Gender</th>
                                 <th class="sorting" tabindex="0" aria-controls="zero_config" rowspan="1"
                                     colspan="1" aria-label="Action: activate to sort column ascending"
                                     style="width: 70.8906px;">Action</th>
@@ -119,45 +128,43 @@
                             <!-- end row -->
                         </thead>
                         <tbody>
-                            @forelse ($employees as $employee)
+                            @forelse ($patients as $patient)
                                 <tr class="odd">
                                     <td class="sorting_1">
                                         <div class="d-flex align-items-center">
-                                            <img src="{{ asset($employee->user->image ?? 'assets/images/profile/user-1.jpg') }}"
-                                                alt="avatar" width="35" class="rounded-circle">
+                                            <img src="{{ asset($patient->image_url) }}" alt="avatar"
+                                                width="35" class="rounded-circle">
                                             <div class="ms-3">
                                                 <div class="user-meta-info">
                                                     <h6 class="user-name mb-0" data-name="Emma Adams">
-                                                        {{ $employee->user->name }}</h6>
+                                                        {{ $patient->name }}</h6>
                                                 </div>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="usr-email-addr">{{ $employee->user->email }}</span>
+                                        <span class="usr-email-addr">{{ $patient->email }}</span>
                                     </td>
                                     <td>
-                                        <span class="usr-location">{{ $employee->user->phone }}</span>
+                                        <span class="usr-location">{{ $patient->phone }}</span>
                                     </td>
                                     <td>
-                                        <span class="usr-ph-no">{{ $employee->department->name }}</span>
+                                        <span class="usr-location">{{ $patient->national_id }}</span>
                                     </td>
                                     <td>
-                                        <span
-                                            class="usr-role">{{ $employee->role == 'receptionist' ? 'Receptionist' : 'Nurse' }}</span>
+                                        <span class="usr-location">{{ $patient->gender }}</span>
                                     </td>
                                     <td>
-
                                         <div class="action-btn d-flex">
-                                            <a href="{{ route('employees.show', $employee->id) }}"
+                                            <a href="{{ route('patients.show', $patient->id) }}"
                                                 class="text-info edit me-2">
                                                 <i class="ti ti-eye fs-5"></i>
                                             </a>
-                                            <a href="{{ route('employees.edit', $employee->id) }}"
+                                            <a href="{{ route('patients.edit', $patient->id) }}"
                                                 class="text-primary edit me-2">
                                                 <i class="ti ti-edit fs-5"></i>
                                             </a>
-                                            <form action="{{ route('employees.destroy', $employee->id) }}"
+                                            <form action="{{ route('patients.destroy', $patient->id) }}"
                                                 method="POST" class="d-inline">
                                                 @method('DELETE')
                                                 @csrf
@@ -171,7 +178,7 @@
                             @empty
                                 <tr>
                                     <td colspan="6">
-                                        <p class="text-center">There are no employees</p>
+                                        <p class="text-center">There are no patients</p>
                                     </td>
                                 </tr>
                             @endforelse
@@ -180,7 +187,7 @@
                 </div>
             </div>
             <div class="d-flex justify-content-end mt-3">
-                {{ $employees->links('pagination::bootstrap-5') }}
+                {{ $patients->links('pagination::bootstrap-5') }}
             </div>
         </div>
     </div>
@@ -195,7 +202,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure you want to delete this employee?
+                    Are you sure you want to delete this patient?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>

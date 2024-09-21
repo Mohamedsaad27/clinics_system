@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Interfaces\PatientRepositoryInterface;
 use App\Repositories\DoctorRepository;
+use App\Repositories\PatientRepository;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\EmployeeRepository;
 use App\Interfaces\DoctorRepositoryInterface;
@@ -17,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     {
         app()->bind(DoctorRepositoryInterface::class, DoctorRepository::class);
         app()->bind(EmployeeRepositoryInterface::class, EmployeeRepository::class);
+        app()->bind(PatientRepositoryInterface::class, PatientRepository::class);
     }
 
     /**
