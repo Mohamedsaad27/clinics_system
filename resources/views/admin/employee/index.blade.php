@@ -158,6 +158,9 @@
                     </table>
                 </div>
             </div>
+            <div class="d-flex justify-content-end mt-3">
+                {{ $employees->links('pagination::bootstrap-5') }}
+            </div>
         </div>
     </div>
 

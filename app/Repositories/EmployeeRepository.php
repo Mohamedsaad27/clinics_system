@@ -16,7 +16,7 @@ class EmployeeRepository implements EmployeeRepositoryInterface
 {
     public function index()
     {
-        $employees = Employee::with('user.userAddresses', 'department')->get();
+        $employees = Employee::with('user.userAddresses', 'department')->paginate(5);
         return view('admin.employee.index', compact('employees'));
     }
 
