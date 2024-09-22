@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Interfaces\DepartmentRepositoryInterface;
+use App\Repositories\DepartmentRepository;
 use App\Repositories\ShiftRepository;
 use App\Repositories\ClinicRepository;
 use App\Repositories\DoctorRepository;
@@ -26,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
         app()->bind(PatientRepositoryInterface::class, PatientRepository::class);
         app()->bind(ClinicRepositoryInterface::class, ClinicRepository::class);
         app()->bind(ShiftRepositoryInterface::class, ShiftRepository::class);
+        app()->bind(DepartmentRepositoryInterface::class, DepartmentRepository::class);
     }
 
     /**
