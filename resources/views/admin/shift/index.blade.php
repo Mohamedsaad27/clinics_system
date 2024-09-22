@@ -34,7 +34,7 @@
 
             // Add this script to handle the delete confirmation modal
             $(document).ready(function() {
-                $('.delete-clinic').click(function(e) {
+                $('.delete-shift').click(function(e) {
                     e.preventDefault();
                     var form = $(this).closest('form');
                     $('#confirmDeleteModal').modal('show');
@@ -50,17 +50,17 @@
         <div class="card-body px-4 py-3">
             <div class="row align-items-center">
                 <div class="col-9">
-                    <h4 class="fw-semibold mb-8">Clinics</h4>
+                    <h4 class="fw-semibold mb-8">Shifts</h4>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a class="text-muted" href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item" aria-current="page">Clinics</li>
+                            <li class="breadcrumb-item" aria-current="page">Shifts</li>
                         </ol>
                     </nav>
                 </div>
                 <div class="col-3">
                     <div class="text-center mb-n5">
-                        <a href="{{ route('clinics.create') }}" class="btn btn-primary">Add New Clinic</a>
+                        <a href="{{ route('shifts.create') }}" class="btn mb-1 btn-primary btn-lg">Add New Shift</a>
                     </div>
                 </div>
             </div>
@@ -71,43 +71,45 @@
     <div class="card">
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-striped table-bordered">
+                <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Category</th>
-                            <th>Location</th>
-                            <th>Contact Info</th>
+                            <th>Doctor</th>
+                            <th>Clinic</th>
+                            <th>Date</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Max Patients</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($clinics as $clinic)
+                        @forelse($shifts as $shift)
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ asset($clinic->image ?? 'assets/images/profile/user-1.jpg') }}"
-                                            alt="avatar" width="35" class="rounded-circle">
                                         <div class="ms-3">
-                                            <h6 class="fw-semibold mb-0">{{ $clinic->clinic_name }}</h6>
+                                            <h6 class="fw-semibold mb-0">{{ $shift->doctor->user->name }}</h6>
                                         </div>
                                     </div>
                                 </td>
-                                <td>{{ $clinic->category->name }}</td>
-                                <td>{{ $clinic->location }}</td>
-                                <td>{{ $clinic->contact_info }}</td>
+                                <td>{{ $shift->clinic->clinic_name }}</td>
+                                <td>{{ $shift->shift_date }}</td>
+                                <td>{{ \Carbon\Carbon::parse($shift->start_time)->format('h:i A') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($shift->end_time)->format('h:i A') }}</td>
+                                <td>{{ $shift->max_patients }}</td>
                                 <td>
                                     <div class="action-btn d-flex">
-                                        <a href="{{ route('clinics.show', $clinic->id) }}" class="text-info edit me-2">
+                                        <a href="{{ route('shifts.show', $shift->id) }}" class="text-info edit me-2">
                                             <i class="ti ti-eye fs-5"></i>
                                         </a>
-                                        <a href="{{ route('clinics.edit', $clinic->id) }}" class="text-primary edit me-2">
+                                        <a href="{{ route('shifts.edit', $shift->id) }}" class="text-primary edit me-2">
                                             <i class="ti ti-edit fs-5"></i>
                                         </a>
-                                        <form action="{{ route('clinics.destroy', $clinic->id) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('shifts.destroy', $shift->id) }}" method="POST" class="d-inline delete-shift">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="button" class="bg-transparent border-0 delete-clinic">
+                                            <button type="button" class="bg-transparent border-0 delete-shift">
                                                 <i class="ti ti-trash text-danger fs-6"></i>
                                             </button>
                                         </form>
@@ -116,7 +118,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center">No clinics found.</td>
+                                <td colspan="7" class="text-center">No shifts found.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -133,7 +135,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to delete this doctor?
+                Are you sure you want to delete this shift?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -142,5 +144,4 @@
         </div>
     </div>
 </div>
-
 </x-admin-layout>

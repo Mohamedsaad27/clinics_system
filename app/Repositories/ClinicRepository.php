@@ -43,6 +43,7 @@ class ClinicRepository implements ClinicRepositoryInterface
     }
     public function show(Clinic $clinic)
     {
+        $clinic->load('doctors', 'appointments');
         return view('admin.clinics.show', compact('clinic'));
     }
     public function edit(Clinic $clinic)

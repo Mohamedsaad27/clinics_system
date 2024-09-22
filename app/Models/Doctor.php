@@ -32,4 +32,8 @@ class Doctor extends Model
     {
         return $this->belongsTo(Specialty::class);
     }
+    public function shifts()
+    {
+        return $this->hasMany(Shift::class, 'doctor_id', 'id');
+    }
 }
