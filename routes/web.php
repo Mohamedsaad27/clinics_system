@@ -1,11 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\AppointmentController;
 
 
 Route::get('/dashboard', function () {
@@ -36,6 +39,9 @@ Route::group(
         Route::resource('/employees', EmployeeController::class);
         Route::resource('/patients', PatientController::class);
         Route::resource('/clinics', ClinicController::class);
+        Route::resource('/appointments', AppointmentController::class);
+        Route::resource('/departments', DepartmentController::class);
+        Route::resource('/shifts', ShiftController::class);
 
     }
 );
