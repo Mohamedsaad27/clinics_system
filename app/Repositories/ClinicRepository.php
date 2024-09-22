@@ -20,6 +20,7 @@ class ClinicRepository implements ClinicRepositoryInterface
     }
     public function store(StoreClinicRequest $request){
         $data = $request->validated();
+        // dd($data);
         try{
             DB::beginTransaction();
             if ($request->hasFile('image')) {
@@ -32,10 +33,10 @@ class ClinicRepository implements ClinicRepositoryInterface
             }
             $clinic = Clinic::create($data);
             DB::commit();
-            return redirect()->route('admin.clinics.index')->with('successCreate', 'Clinic created successfully');
+            return redirect()->route('clinics.create')->with('successCreate', 'Clinic created successfully');
         }catch(\Exception $e){
             DB::rollBack();
-            return redirect()->route('admin.clinics.index')->with('errorCreate', 'Clinic creation failed');
+            return redirect()->route('clinics.create')->with('errorCreate', 'Clinic creation failed');
         }
     }
     public function show(Clinic $clinic){
@@ -62,10 +63,10 @@ class ClinicRepository implements ClinicRepositoryInterface
             }
             $clinic->update($data);
             DB::commit();
-            return redirect()->route('admin.clinics.index')->with('successUpdate', 'Clinic updated successfully');
+            return redirect()->route('clinics.index')->with('successUpdate', 'Clinic updated successfully');
         }catch(\Exception $e){
             DB::rollBack();
-            return redirect()->route('admin.clinics.index')->with('errorUpdate', 'Clinic update failed');
+            return redirect()->route('clinics.index')->with('errorUpdate', 'Clinic update failed');
         }
     }
     public function destroy(Clinic $clinic){
@@ -76,10 +77,10 @@ class ClinicRepository implements ClinicRepositoryInterface
             }
             $clinic->delete();
             DB::commit();
-            return redirect()->route('admin.clinics.index')->with('successDelete', 'Clinic deleted successfully');
+            return redirect()->route('clinics.index')->with('successDelete', 'Clinic deleted successfully');
         }catch(\Exception $e){
             DB::rollBack();
-            return redirect()->route('admin.clinics.index')->with('errorDelete', 'Clinic deletion failed');
+            return redirect()->route('clinics.index')->with('errorDelete', 'Clinic deletion failed');
         }
     }
 }

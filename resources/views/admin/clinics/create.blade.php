@@ -27,9 +27,9 @@
                 @csrf
                 <div class="col-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="mb-3">
-                        <label for="name" class="form-label">Clinic Name</label>
-                        <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" required>
-                        @error('name')
+                        <label for="clinic_name" class="form-label">Clinic Name</label>
+                        <input type="text" class="form-control" id="clinic_name" name="clinic_name" value="{{ old('clinic_name') }}" required>
+                        @error('clinic_name')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
@@ -68,9 +68,9 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="phone" class="form-label">Phone</label>
-                        <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone') }}" required>
-                        @error('phone')
+                        <label for="contact_info" class="form-label">Phone</label>
+                        <input type="text" class="form-control" id="contact_info" name="contact_info" value="{{ old('phone') }}" required>
+                        @error('contact_info')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
