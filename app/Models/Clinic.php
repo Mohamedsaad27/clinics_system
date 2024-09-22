@@ -16,6 +16,7 @@ class Clinic extends Model
         'location',
         'contact_info',
         'category_id',
+        'image',
     ];
 
     //  relationship with the Category model
@@ -34,4 +35,5 @@ class Clinic extends Model
     {
         return $this->hasMany(Doctor::class, 'clinic_id', 'id');
     }
+    
 }

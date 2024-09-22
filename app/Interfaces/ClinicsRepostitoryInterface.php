@@ -1,10 +1,10 @@
-<?php
+<?php 
 
 namespace App\Interfaces;
 
+use App\Models\Clinic;
 use App\Http\Requests\Clinic\StoreClinicRequest;
 use App\Http\Requests\Clinic\UpdateClinicRequest;
-use App\Models\Clinic;
 
 interface ClinicRepositoryInterface
 {

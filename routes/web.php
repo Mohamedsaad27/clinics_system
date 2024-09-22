@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\PatientController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmployeeController;
 
@@ -34,6 +35,7 @@ Route::group(
         Route::resource('/doctors', DoctorController::class);
         Route::resource('/employees', EmployeeController::class);
         Route::resource('/patients', PatientController::class);
+        Route::resource('/clinics', ClinicController::class);
 
     }
 );

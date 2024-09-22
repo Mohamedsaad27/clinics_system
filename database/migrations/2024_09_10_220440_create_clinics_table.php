@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('clinic_name');
             $table->string('location');
             $table->string('contact_info');
+            $table->string('image')->nullable();
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->timestamps();
             $table->index('category_id');
