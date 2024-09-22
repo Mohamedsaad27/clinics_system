@@ -10,18 +10,21 @@ use App\Http\Requests\Clinic\UpdateClinicRequest;
 
 class ClinicRepository implements ClinicRepositoryInterface
 {
-    public function index(){
+    public function index()
+    {
         $clinics = Clinic::with('category')->get();
         return view('admin.clinics.index', compact('clinics'));
     }
-    public function create(){
+    public function create()
+    {
         $categories = Category::all();
         return view('admin.clinics.create', compact('categories'));
     }
-    public function store(StoreClinicRequest $request){
+    public function store(StoreClinicRequest $request)
+    {
         $data = $request->validated();
         // dd($data);
-        try{
+        try {
             DB::beginTransaction();
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
@@ -34,27 +37,30 @@ class ClinicRepository implements ClinicRepositoryInterface
             $clinic = Clinic::create($data);
             DB::commit();
             return redirect()->route('clinics.create')->with('successCreate', 'Clinic created successfully');
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->route('clinics.create')->with('errorCreate', 'Clinic creation failed');
         }
     }
-    public function show(Clinic $clinic){
+    public function show(Clinic $clinic)
+    {
         return view('admin.clinics.show', compact('clinic'));
     }
-    public function edit(Clinic $clinic){
+    public function edit(Clinic $clinic)
+    {
         $categories = Category::all();
         return view('admin.clinics.edit', compact('clinic', 'categories'));
     }
-    public function update(UpdateClinicRequest $request, Clinic $clinic){
+    public function update(UpdateClinicRequest $request, Clinic $clinic)
+    {
         $data = $request->validated();
-        try{
+        try {
             DB::beginTransaction();
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $imageName = 'assets/imgs/clinics/' . time() . '.' . $image->getClientOriginalExtension();
                 $image->move(public_path('assets/imgs/clinics'), $imageName);
-                if($clinic->image){
+                if ($clinic->image) {
                     unlink(public_path($clinic->image));
                 }
                 $data['image'] = $imageName;
@@ -64,21 +70,22 @@ class ClinicRepository implements ClinicRepositoryInterface
             $clinic->update($data);
             DB::commit();
             return redirect()->route('clinics.index')->with('successUpdate', 'Clinic updated successfully');
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->route('clinics.index')->with('errorUpdate', 'Clinic update failed');
         }
     }
-    public function destroy(Clinic $clinic){
-        try{
+    public function destroy(Clinic $clinic)
+    {
+        try {
             DB::beginTransaction();
-            if($clinic->image){
+            if ($clinic->image) {
                 unlink(public_path($clinic->image));
             }
             $clinic->delete();
             DB::commit();
             return redirect()->route('clinics.index')->with('successDelete', 'Clinic deleted successfully');
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->route('clinics.index')->with('errorDelete', 'Clinic deletion failed');
         }
