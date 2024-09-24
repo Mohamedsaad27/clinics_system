@@ -23,7 +23,6 @@ class DatabaseSeeder extends Seeder
             DoctorSeeder::class,
             ShiftSeeder::class,
             AppointmentSeeder::class,
-
         ]);
     }
 }
