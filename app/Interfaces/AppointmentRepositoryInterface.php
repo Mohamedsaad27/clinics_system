@@ -2,14 +2,18 @@
 
 namespace App\Interfaces;
 
-use App\Http\Requests\AppointmentRequest\StoreAppointmentRequest;
-use App\Http\Requests\AppointmentRequest\UpdateAppointmentRequest;
+use App\Http\Requests\Appointment\StoreAppointmentRequest;
+use App\Http\Requests\Appointment\UpdateAppointmentRequest;
+use App\Models\Appointment;
 
 interface AppointmentRepositoryInterface
 {
-    public function getAllAppointments();
-    public function getAppointmentById($id);
-    public function createAppointment(StoreAppointmentRequest $request);
-    public function updateAppointment(UpdateAppointmentRequest $request,$id);
-    public function deleteAppointment($id);
+    public function index();
+    public function create();
+    public function store(StoreAppointmentRequest $storeAppointmentRequest);
+    public function show(Appointment $appointment);
+    public function edit(Appointment $appointment);
+    public function update(UpdateAppointmentRequest $updateAppointmentRequest, Appointment $appointment);
+    public function destroy(Appointment $appointment);
+    public function getClinics($departmentId);
 }

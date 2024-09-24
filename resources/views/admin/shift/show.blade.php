@@ -7,8 +7,10 @@
                     <h4 class="fw-semibold mb-8">Shift Details</h4>
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a class="text-muted" href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item"><a class="text-muted" href="{{ route('shifts.index') }}">Shifts</a></li>
+                            <li class="breadcrumb-item"><a class="text-muted"
+                                    href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a class="text-muted"
+                                    href="{{ route('shifts.index') }}">Shifts</a></li>
                             <li class="breadcrumb-item" aria-current="page">Shift Details</li>
                         </ol>
                     </nav>
@@ -25,17 +27,19 @@
                 <div class="col-md-6">
                     <p><strong>Doctor:</strong> {{ $shift->doctor->name }}</p>
                     <p><strong>Clinic:</strong> {{ $shift->clinic->clinic_name }}</p>
-                    <p><strong>Shift Date:</strong> {{ $shift->shift_date }}</p>
+                    <p><strong>Shift Month:</strong> {{ $shift->shift_month }}</p>
+                    <p><strong>Shift Day:</strong> {{ ucfirst($shift->shift_day_during_month) }}</p>
                 </div>
                 <div class="col-md-6">
                     <p><strong>Start Time:</strong> {{ \Carbon\Carbon::parse($shift->start_time)->format('H:i') }}</p>
                     <p><strong>End Time:</strong> {{ \Carbon\Carbon::parse($shift->end_time)->format('H:i') }}</p>
                     <p><strong>Max Patients:</strong> {{ $shift->max_patients }}</p>
+                    <p><strong>Max Patients:</strong> {{ $shift->price_appoinment }}</p>
                 </div>
             </div>
 
             <h5 class="card-title mt-4">Appointments</h5>
-            @if($shift->appointments->count() > 0)
+            @if ($shift->appointments->count() > 0)
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -45,7 +49,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($shift->appointments as $appointment)
+                        @foreach ($shift->appointments as $appointment)
                             <tr>
                                 <td>{{ $appointment->patient->name }}</td>
                                 <td>{{ \Carbon\Carbon::parse($appointment->appointment_time)->format('H:i') }}</td>
@@ -63,7 +67,8 @@
                 <form action="{{ route('shifts.destroy', $shift->id) }}" method="POST" class="d-inline">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this shift?')">Delete Shift</button>
+                    <button type="submit" class="btn btn-danger"
+                        onclick="return confirm('Are you sure you want to delete this shift?')">Delete Shift</button>
                 </form>
             </div>
         </div>

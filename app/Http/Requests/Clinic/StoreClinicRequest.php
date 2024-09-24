@@ -26,6 +26,7 @@ class StoreClinicRequest extends FormRequest
             'location' => 'required|string|max:255',
             'contact_info' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
+            'department_id' => 'required|exists:departments,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }

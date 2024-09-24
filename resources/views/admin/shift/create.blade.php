@@ -9,9 +9,9 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a class="text-muted"
-                                href="{{ route('admin.dashboard') }}">Dashboard</a></li>
+                                    href="{{ route('admin.dashboard') }}">Dashboard</a></li>
                             <li class="breadcrumb-item"><a class="text-muted"
-                                href="{{ route('shifts.index') }}">Shifts</a></li>
+                                    href="{{ route('shifts.index') }}">Shifts</a></li>
                             <li class="breadcrumb-item" aria-current="page">Add Shift</li>
                         </ol>
                     </nav>
@@ -30,8 +30,9 @@
                         <label for="doctor_id" class="form-label">Doctor</label>
                         <select class="form-select" id="doctor_id" name="doctor_id" required>
                             <option value="">Select a doctor</option>
-                            @foreach($doctors as $doctor)
-                                <option value="{{ $doctor->id }}" {{ old('doctor_id') == $doctor->id ? 'selected' : '' }}>
+                            @foreach ($doctors as $doctor)
+                                <option value="{{ $doctor->id }}"
+                                    {{ old('doctor_id') == $doctor->id ? 'selected' : '' }}>
                                     {{ $doctor->name }}
                                 </option>
                             @endforeach
@@ -45,8 +46,9 @@
                         <label for="clinic_id" class="form-label">Clinic</label>
                         <select class="form-select" id="clinic_id" name="clinic_id" required>
                             <option value="">Select a clinic</option>
-                            @foreach($clinics as $clinic)
-                                <option value="{{ $clinic->id }}" {{ old('clinic_id') == $clinic->id ? 'selected' : '' }}>
+                            @foreach ($clinics as $clinic)
+                                <option value="{{ $clinic->id }}"
+                                    {{ old('clinic_id') == $clinic->id ? 'selected' : '' }}>
                                     {{ $clinic->clinic_name }}
                                 </option>
                             @endforeach
@@ -57,9 +59,23 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="shift_date" class="form-label">Shift Date</label>
-                        <input type="date" class="form-control" id="shift_date" name="shift_date" value="{{ old('shift_date') }}" required>
-                        @error('shift_date')
+                        <label for="shift_month" class="form-label">Shift Date</label>
+                        <input type="month" class="form-control" id="shift_date" name="shift_month"
+                            value="{{ old('shift_month') }}" required>
+                        @error('shift_month')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="shift_day_during_month" class="form-label">Shift Day During This Month</label>
+                        <select class="form-select" id="shift_day_during_month" name="shift_day_during_month"
+                            value="{{ old('shift_day_during_month') }}" required>
+                            @foreach ($days as $day)
+                                <option value="{{ $day }}">{{ ucfirst($day) }}</option>
+                            @endforeach
+                        </select>
+                        @error('shift_day_during_month')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
@@ -68,7 +84,8 @@
                 <div class="col-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="mb-3">
                         <label for="start_time" class="form-label">Start Time</label>
-                        <input type="time" class="form-control" id="start_time" name="start_time" value="{{ old('start_time') }}" required>
+                        <input type="time" class="form-control" id="start_time" name="start_time"
+                            value="{{ old('start_time') }}" required>
                         @error('start_time')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -76,7 +93,8 @@
 
                     <div class="mb-3">
                         <label for="end_time" class="form-label">End Time</label>
-                        <input type="time" class="form-control" id="end_time" name="end_time" value="{{ old('end_time') }}" required>
+                        <input type="time" class="form-control" id="end_time" name="end_time"
+                            value="{{ old('end_time') }}" required>
                         @error('end_time')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -84,8 +102,18 @@
 
                     <div class="mb-3">
                         <label for="max_patients" class="form-label">Maximum Patients</label>
-                        <input type="number" class="form-control" id="max_patients" name="max_patients" value="{{ old('max_patients') }}" min="1" required>
+                        <input type="number" class="form-control" id="max_patients" name="max_patients"
+                            value="{{ old('max_patients') }}" min="1" required>
                         @error('max_patients')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="price_appoinment" class="form-label">Price Appoinment</label>
+                        <input type="number" class="form-control" id="price_appoinment" name="price_appoinment"
+                            value="{{ old('price_appoinment') }}" min="1" required>
+                        @error('price_appoinment')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>

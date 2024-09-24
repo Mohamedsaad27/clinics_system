@@ -3,6 +3,7 @@
 namespace App\Repositories;
 use App\Models\Clinic;
 use App\Models\Category;
+use App\Models\Department;
 use Illuminate\Support\Facades\DB;
 use App\Interfaces\ClinicRepositoryInterface;
 use App\Http\Requests\Clinic\StoreClinicRequest;
@@ -18,7 +19,9 @@ class ClinicRepository implements ClinicRepositoryInterface
     public function create()
     {
         $categories = Category::all();
-        return view('admin.clinics.create', compact('categories'));
+        $departments = Department::all();
+
+        return view('admin.clinics.create', compact('categories', 'departments'));
     }
     public function store(StoreClinicRequest $request)
     {

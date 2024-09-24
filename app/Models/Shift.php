@@ -14,10 +14,12 @@ class Shift extends Model
     protected $fillable = [
         'doctor_id',
         'clinic_id',
-        'shift_date',
+        'shift_month',
+        'shift_day_during_month',
         'start_time',
         'end_time',
         'max_patients',
+        'price_appoinment',
     ];
 
     //  relationship with the Doctor model

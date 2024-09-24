@@ -16,6 +16,7 @@ class Clinic extends Model
         'location',
         'contact_info',
         'category_id',
+        'department_id',
         'image',
     ];
 
@@ -24,14 +25,17 @@ class Clinic extends Model
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
     public function appointments()
     {
         return $this->hasMany(Appointment::class, 'clinic_id', 'id');
     }
-
     public function doctors()
     {
-        return $this->hasMany(Doctor::class, 'doctor_id', 'id');
+        return $this->belongsToMany(Doctor::class, 'clinic_doctor');
     }
     public function shifts()
     {

@@ -159,7 +159,7 @@
                             <span class="hide-menu ms-2 ps-1">Appointments</span>
                         </div>
                     </a>
-                    <ul class="submenu collapse list-unstyled ms-21 me-5" id="appointmentsSubmenu">
+                    <ul class="submenu collapse list-unstyled ms-21 me-2" id="appointmentsSubmenu">
                         <li class="py-2 mb-1">
                             <a class="text-dark p-2" href="{{ route('appointments.create') }}">Add Appointment</a>
                         </li>

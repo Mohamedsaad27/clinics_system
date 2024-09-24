@@ -24,7 +24,8 @@ class UpdateShiftRequest extends FormRequest
         return [
             'doctor_id' => 'required|exists:doctors,id',
             'clinic_id' => 'required|exists:clinics,id',
-            'shift_date' => 'required|date',
+            'shift_month' => 'required|date_format:Y-m',
+            'shift_day_during_month' => 'required|in:saturday,sunday,monday,tuesday,wednesday,thursday,friday',
             'start_time' => 'required|date_format:H:i',
             'end_time' => 'required|date_format:H:i|after:start_time',
             'max_patients' => 'required|integer|min:1',

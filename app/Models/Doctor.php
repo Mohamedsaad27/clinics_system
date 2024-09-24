@@ -36,4 +36,9 @@ class Doctor extends Model
     {
         return $this->hasMany(Shift::class, 'doctor_id', 'id');
     }
+
+    public function clinics()
+    {
+        return $this->belongsToMany(Clinic::class, 'clinic_doctor');
+    }
 }

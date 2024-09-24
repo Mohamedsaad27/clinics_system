@@ -42,6 +42,10 @@ Route::group(
         Route::resource('/appointments', AppointmentController::class);
         Route::resource('/departments', DepartmentController::class);
         Route::resource('/shifts', ShiftController::class);
+        Route::get('/get-clinics/{department_id}', [AppointmentController::class, 'getClinics']);
+        Route::get('/get-doctors/{clinic_id}', [AppointmentController::class, 'getDoctors']);
+        Route::get('/get-shift/{doctor_id}', [AppointmentController::class, 'getShift']);
+        Route::resource('/appoinments', AppointmentController::class);
 
     }
 );

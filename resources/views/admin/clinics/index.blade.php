@@ -76,6 +76,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Category</th>
+                            <th>Department</th>
                             <th>Location</th>
                             <th>Contact Info</th>
                             <th>Actions</th>
@@ -94,6 +95,7 @@
                                     </div>
                                 </td>
                                 <td>{{ $clinic->category->name }}</td>
+                                <td>{{ $clinic->department->name }}</td>
                                 <td>{{ $clinic->location }}</td>
                                 <td>{{ $clinic->contact_info }}</td>
                                 <td>

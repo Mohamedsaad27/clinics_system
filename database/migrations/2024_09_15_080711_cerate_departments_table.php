@@ -23,6 +23,10 @@ return new class extends Migration {
             $table->foreignId('department_id')->constrained('departments')->after('role');
             $table->index('department_id');
         });
+        Schema::table('clinics', function (Blueprint $table) {
+            $table->foreignId('department_id')->constrained('departments')->after('image');
+            $table->index('department_id');
+        });
     }
 
     /**
