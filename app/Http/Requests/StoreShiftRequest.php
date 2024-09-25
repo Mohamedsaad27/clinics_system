@@ -22,11 +22,11 @@ class StoreShiftRequest extends FormRequest
      */
     public function rules(): array
     {
-        $nowMonth = \Carbon\Carbon::now()->format('d-m-y');
+        // $nowMonth = \Carbon\Carbon::now()->format('d-m-y');
         return [
             'doctor_id' => 'required|exists:doctors,id',
             'clinic_id' => 'required|exists:clinics,id',
-            'shift_month' => "required|date_format:Y-m|after:$nowMonth",
+            'shift_month' => "required|date_format:Y-m",
             'shift_day_during_month' => [
                 'required',
                 'in:saturday,sunday,monday,tuesday,wednesday,thursday,friday',
