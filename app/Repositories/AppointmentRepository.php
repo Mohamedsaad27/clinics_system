@@ -22,7 +22,8 @@ class AppointmentRepository implements AppointmentRepositoryInterface
      */
     public function index()
     {
-        return Appointment::all(); // Fetch all appointments
+        $appointments = Appointment::with(['patient', 'doctor', 'shift', 'clinic'])->get();
+        return view('admin.appointment.index', compact('appointments'));
     }
 
     /**
@@ -47,21 +48,8 @@ class AppointmentRepository implements AppointmentRepositoryInterface
     public function store(StoreAppointmentRequest $storeAppointmentRequest)
     {
         $data = $storeAppointmentRequest->validated();
-
-        // $shift = Shift::find($data['shift_id']);
-        // $appointmentsCount = Appointment::where('shift_id', $data['shift_id'])
-        //     ->whereDay('created_at', Carbon::now())
-        //     ->count();
-        // dd($appointmentsCount);
-
-        // if ($appointmentsCount > $shift->max_patients) {
-        //     return redirect()->route('appointments.create')->with('errorCreate', 'Shift has reached the maximum number of patients.');
-        // }
-
         try {
-
             Appointment::create($data);
-
             return redirect()->route('appointments.index')->with('successCreate', 'Appointment created successfully.');
         } catch (\Exception $e) {
             dd($e->getMessage());
@@ -77,7 +65,7 @@ class AppointmentRepository implements AppointmentRepositoryInterface
      */
     public function show(Appointment $appointment)
     {
-        return $appointment;
+        return view('admin.appointment.show', compact('appointment'));
     }
 
     /**
@@ -113,8 +101,16 @@ class AppointmentRepository implements AppointmentRepositoryInterface
      */
     public function destroy(Appointment $appointment)
     {
-        return $appointment->delete(); // Delete the appointment
+         try {
+             $appointment->delete();
+             return redirect()->route('appointments.index')->with('successDelete', 'Appointment deleted successfully.');
+         } catch (\Exception $e) {
+             dd($e->getMessage());
+             return redirect()->route('appointments.index')->with('errorDelete', 'Appointment deletion failed.');
+         }
     }
+
+    
     public function getClinics($departmentId)
     {
         $clinics = Clinic::where('department_id', $departmentId)->get();

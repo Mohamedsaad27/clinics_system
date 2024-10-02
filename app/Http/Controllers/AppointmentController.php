@@ -20,7 +20,7 @@ class AppointmentController extends Controller
      */
     public function index()
     {
-        //
+        return $this->appointmentRepository->index();
     }
 
     /**
@@ -44,7 +44,7 @@ class AppointmentController extends Controller
      */
     public function show(Appointment $appointment)
     {
-        //
+        return $this->appointmentRepository->show($appointment);
     }
 
     /**
@@ -68,7 +68,7 @@ class AppointmentController extends Controller
      */
     public function destroy(Appointment $appointment)
     {
-        //
+        return $this->appointmentRepository->destroy($appointment);
     }
 
     public function getClinics($departmentId)

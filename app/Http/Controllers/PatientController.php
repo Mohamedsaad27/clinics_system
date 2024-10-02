@@ -97,4 +97,10 @@ class PatientController extends Controller
             return redirect()->route('patients.index')->with('errorDelete', "An error occurred while deleting the patient :" . $e->getMessage());
         }
     }
+    public function getPatientHistory($id) {
+        $patient = User::find($id);
+        $appointments = $patient->appointments()->with(['patient', 'doctor.user', 'clinic.department'])->get();
+        return response()->json($appointments);
+    }
+
 }

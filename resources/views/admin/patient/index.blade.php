@@ -52,6 +52,35 @@
                     });
                 });
 
+                $('.patient-history').click(function(e) {
+                    e.preventDefault();
+                    var patientId = $(this).data('patient-id');
+                    $.ajax({
+                        url: '/patient/' + patientId + '/patient-history',
+                        method: 'GET',
+                        success: function(response) {
+                            $('#patientHistoryModal').modal('show');
+                            $('#patientHistoryModal .modal-body').html('');
+                            var tableHtml = '<table class="table table-bordered table-striped table-hover"><thead><tr><th>Name</th><th>ID</th><th>Phone</th><th>Date</th><th>Department</th><th>Doctor</th><th>Price</th></tr></thead><tbody>';
+                            $.each(response, function(index, appointment) {
+                                tableHtml += '<tr>' +
+                                    '<td>' + appointment.patient.name + '</td>' +
+                                    '<td>' + appointment.patient_id + '</td>' +
+                                    '<td>' + appointment.patient.phone + '</td>' +
+                                    '<td>' + appointment.appointment_date + '</td>' +
+                                    '<td>' + appointment.clinic.department.name + '</td>' +
+                                    '<td>' + appointment.doctor.user.name + '</td>' +
+                                    '<td>' + appointment.price + '</td>' +
+                                    '</tr>';
+                            });
+                            tableHtml += '</tbody></table>';
+                            $('#patientHistoryModal .modal-body').html(tableHtml);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Failed to fetch patient history:', error);
+                        }
+                    });
+                });
             });
         </script>
     @endpush
@@ -172,6 +201,10 @@
                                                     <i class="ti ti-trash text-danger fs-6"></i>
                                                 </button>
                                             </form>
+                                            <a href="{{ route('patient.patientHistory', $patient->id) }}"
+                                                class="text-success patient-history me-2" data-patient-id="{{ $patient->id }}">
+                                                <i class="ti ti-file-text fs-5"></i>
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>
@@ -212,6 +245,23 @@
         </div>
     </div>
 
-
+    <!-- Patient History Modal -->
+    <div class="modal fade" id="patientHistoryModal" tabindex="-1" aria-labelledby="patientHistoryModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="patientHistoryModalLabel">Patient History</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Patient history will be dynamically loaded here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </x-admin-layout>
