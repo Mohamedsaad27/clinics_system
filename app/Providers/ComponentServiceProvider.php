@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\View\Components\Admin\AdminLayout;
-use Blade;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class ComponentServiceProvider extends ServiceProvider

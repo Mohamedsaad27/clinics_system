@@ -27,22 +27,6 @@
                 @csrf
                 <div class="col-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="mb-3">
-                        <label for="doctor_id" class="form-label">Doctor</label>
-                        <select class="form-select" id="doctor_id" name="doctor_id" required>
-                            <option value="">Select a doctor</option>
-                            @foreach ($doctors as $doctor)
-                                <option value="{{ $doctor->id }}"
-                                    {{ old('doctor_id') == $doctor->id ? 'selected' : '' }}>
-                                    {{ $doctor->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('doctor_id')
-                            <div class="text-danger">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
                         <label for="clinic_id" class="form-label">Clinic</label>
                         <select class="form-select" id="clinic_id" name="clinic_id" required>
                             <option value="">Select a clinic</option>
@@ -58,6 +42,17 @@
                         @enderror
                     </div>
 
+                    <div class="mb-3">
+                        <label for="doctor_id" class="form-label">Doctor</label>
+                        <select class="form-select" id="doctor_id" name="doctor_id" required>
+                            <option value="">Select a doctor</option>
+                        </select>
+                        @error('doctor_id')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    
                     <div class="mb-3">
                         <label for="shift_month" class="form-label">Shift Date</label>
                         <input type="month" class="form-control" id="shift_date" name="shift_month"
@@ -127,3 +122,42 @@
     </div>
 
 </x-admin-layout>
+
+        {{-- Get Doctor By Clinic --}}
+        <script>
+            $(document).ready(function() {
+                $('#clinic_id').change(function() {
+                    var clinic_id = $(this).val();
+                    if (clinic_id) {
+                        $.ajax({
+                            url: '/admin/get-doctors/' + clinic_id,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(data) {
+                                $('#doctor_id').empty();
+                                $('#doctor_id').append(
+                                    '<option disabled selected>Select Doctor</option>');
+                                if (data.length > 0) {
+                                    $.each(data, function(key, doctor) {
+                                        $('#doctor_id').append('<option value="' + doctor.id +
+                                            '">' +
+                                            doctor.user.name + '</option>');
+                                    });
+                                } else {
+                                    $('#doctor_id').append(
+                                        '<option disabled>No doctors available</option>');
+                                }
+                            },
+                            error: function() {
+                                $('#doctor_id').empty();
+                                $('#doctor_id').append(
+                                    '<option disabled>Failed to load doctors</option>');
+                            }
+                        });
+                    } else {
+                        $('#doctor_id').empty();
+                        $('#doctor_id').append('<option disabled selected>Select a Clinic first</option>');
+                    }
+                });
+            });
+        </script>

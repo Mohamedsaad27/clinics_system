@@ -1,15 +1,16 @@
 <?php
 
 namespace App\Repositories;
-use App\Http\Requests\Patient\StorePatientRequest;
-use App\Http\Requests\Patient\UpdatePatientRequest;
-use App\Interfaces\PatientRepositoryInterface;
 use App\Models\User;
 use App\Models\UserAddress;
-use Arr;
-use DB;
-use Hash;
-use Storage;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use App\Interfaces\PatientRepositoryInterface;
+use App\Http\Requests\Patient\StorePatientRequest;
+use App\Http\Requests\Patient\UpdatePatientRequest;
+
 
 class PatientRepository implements PatientRepositoryInterface
 {
