@@ -28,7 +28,7 @@ class MedicalDeviceRepository implements MedicalDeviceRepositoryInterface
             return redirect()->back()->with('error',$e->getMessage());
         }
     }
-    public function show($id    )
+    public function show($id)
     {
         $medicalDevice = MedicalDevice::find($id);
         return view('admin.devices.show',compact('medicalDevice'));
