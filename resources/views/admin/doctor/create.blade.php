@@ -30,7 +30,7 @@
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
                         <input type="name" class="form-control" name="name" id="name"
-                            value="{{ old('name') }}">
+                            value="{{ old('name') }}" placeholder="Enter name">
                         @error('name')
                             <div class="form-text text-danger">
                                 {{ $message }}
@@ -41,12 +41,10 @@
                     <div class="mb-3">
                         <label for="email" class="form-label">Email address</label>
                         <input type="email" class="form-control" name="email" id="email"
-                            value="{{ old('email') }}" aria-describedby="emailHelp">
+                            value="{{ old('email') }}" aria-describedby="emailHelp" placeholder="Enter email">
                         @error('email')
                             <div class="form-text text-danger">
-                                <div class="form-text text-danger">
-                                    {{ $message }}
-                                </div>
+                                {{ $message }}
                             </div>
                         @enderror
                     </div>
@@ -54,12 +52,10 @@
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
                         <input type="password" class="form-control" id="password" name="password"
-                            value="{{ old('password') }}">
+                            value="{{ old('password') }}" placeholder="Enter password">
                         @error('password')
                             <div class="form-text text-danger">
-                                <div class="form-text text-danger">
-                                    {{ $message }}
-                                </div>
+                                {{ $message }}
                             </div>
                         @enderror
                     </div>
@@ -67,12 +63,10 @@
                     <div class="mb-3">
                         <label for="national_id" class="form-label">National ID</label>
                         <input type="text" class="form-control" id="national_id" name="national_id"
-                            value="{{ old('national_id') }}">
+                            value="{{ old('national_id') }}" placeholder="Enter national ID">
                         @error('national_id')
                             <div class="form-text text-danger">
-                                <div class="form-text text-danger">
-                                    {{ $message }}
-                                </div>
+                                {{ $message }}
                             </div>
                         @enderror
                     </div>
@@ -80,12 +74,10 @@
                     <div class="mb-3">
                         <label for="image" class="form-label">Profile Image</label>
                         <input type="file" class="form-control" id="image" name="image"
-                            value="{{ old('image') }}">
+                            value="{{ old('image') }}" placeholder="Upload profile image">
                         @error('image')
                             <div class="form-text text-danger">
-                                <div class="form-text text-danger">
-                                    {{ $message }}
-                                </div>
+                                {{ $message }}
                             </div>
                         @enderror
                     </div>
@@ -93,12 +85,10 @@
                     <div class="mb-3">
                         <label for="qualification" class="form-label">Qualification</label>
                         <input type="text" class="form-control" id="qualification" name="qualification"
-                            value="{{ old('qualification') }}">
+                            value="{{ old('qualification') }}" placeholder="Enter qualification">
                         @error('qualification')
                             <div class="form-text text-danger">
-                                <div class="form-text text-danger">
-                                    {{ $message }}
-                                </div>
+                                {{ $message }}
                             </div>
                         @enderror
                     </div>
@@ -119,9 +109,7 @@
                         </select>
                         @error('specialty_id')
                             <div class="form-text text-danger">
-                                <div class="form-text text-danger">
-                                    {{ $message }}
-                                </div>
+                                {{ $message }}
                             </div>
                         @enderror
                     </div>
@@ -139,9 +127,19 @@
                         </select>
                         @error('department_id')
                             <div class="form-text text-danger">
-                                <div class="form-text text-danger">
-                                    {{ $message }}
-                                </div>
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="clinic_id" class="form-label">Clinic</label>
+                        <select class="form-select" id="clinic_id" name="clinic_id">
+                            <option value="">Select a clinic</option>
+                        </select>
+                        @error('clinic_id')
+                            <div class="form-text text-danger">
+                                {{ $message }}
                             </div>
                         @enderror
                     </div>
@@ -155,9 +153,7 @@
                         </select>
                         @error('gender')
                             <div class="form-text text-danger">
-                                <div class="form-text text-danger">
-                                    {{ $message }}
-                                </div>
+                                {{ $message }}
                             </div>
                         @enderror
                     </div>
@@ -165,40 +161,24 @@
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone</label>
                         <input type="tel" class="form-control" id="phone" name="phone"
-                            value="{{ old('phone') }}">
+                            value="{{ old('phone') }}" placeholder="Enter phone number">
                         @error('phone')
                             <div class="form-text text-danger">
-                                <div class="form-text text-danger">
-                                    {{ $message }}
-                                </div>
+                                {{ $message }}
                             </div>
                         @enderror
                     </div>
 
-                    <div class="mb-3">
-                        <label for="experience_years" class="form-label">Years of Experience</label>
-                        <input type="number" class="form-control" id="experience_years" name="experience_years"
-                            min="0" value="{{ old('experience_years') }}">
-                        @error('experience_years')
-                            <div class="form-text text-danger">
-                                <div class="form-text text-danger">
-                                    {{ $message }}
-                                </div>
-                            </div>
-                        @enderror
-                    </div>
 
                     <div class="row mb-3">
 
                         <div class="col-6">
                             <label for="city" class="form-label">City</label>
                             <input type="text" class="form-control" id="city" name="city"
-                                value="{{ old('city') }}">
+                                value="{{ old('city') }}" placeholder="Enter city">
                             @error('city')
                                 <div class="form-text text-danger">
-                                    <div class="form-text text-danger">
-                                        {{ $message }}
-                                    </div>
+                                    {{ $message }}
                                 </div>
                             @enderror
                         </div>
@@ -206,12 +186,10 @@
                         <div class="col-6">
                             <label for="country" class="form-label">Country</label>
                             <input type="text" class="form-control" id="country" name="country"
-                                value="{{ old('country') }}">
+                                value="{{ old('country') }}" placeholder="Enter country">
                             @error('country')
                                 <div class="form-text text-danger">
-                                    <div class="form-text text-danger">
-                                        {{ $message }}
-                                    </div>
+                                    {{ $message }}
                                 </div>
                             @enderror
                         </div>
@@ -227,4 +205,34 @@
         </div>
     </div>
 
+    
+    @push('scripts')
+        <script>
+            $(document).ready(function() {
+                $('#department_id').change(function() {
+                    var department_id = $(this).val();
+                    if(department_id) {
+                        $.ajax({
+                            url: "{{ url('get-clinics') }}/"+department_id,
+                            type: "GET",
+                            dataType: "json",
+                            success:function(data) {
+                                $('#clinic_id').empty();
+                                if($.isEmptyObject(data)) {
+                                    $('#clinic_id').append('<option value="">No clinics available for this department</option>');
+                                } else {
+                                    $.each(data, function(key, value) {
+                                        $('#clinic_id').append('<option value="'+ value.id +'">'+ value.clinic_name +'</option>');
+                                    });
+                                }
+                            }
+                        });
+                    } else {
+                        $('#clinic_id').empty();
+                        $('#clinic_id').append('<option value="">Select a clinic</option>');
+                    }
+                });
+            });
+        </script>
+    @endpush
 </x-admin-layout>

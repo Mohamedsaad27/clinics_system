@@ -13,8 +13,8 @@ class Doctor extends Model
         'doctor_id',
         'department_id',
         'specialty_id',
-        'experience_years',
         'qualification',
+        'clinic_id'
     ];
 
     // Define each doctor is a user
@@ -37,8 +37,8 @@ class Doctor extends Model
         return $this->hasMany(Shift::class, 'doctor_id', 'id');
     }
 
-    public function clinics()
+    public function clinic()
     {
-        return $this->belongsToMany(Clinic::class, 'clinic_doctor');
+        return $this->belongsTo(Clinic::class, 'clinic_id', 'id');
     }
 }

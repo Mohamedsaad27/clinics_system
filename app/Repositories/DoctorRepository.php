@@ -7,13 +7,14 @@ use App\Models\Doctor;
 use App\Models\Specialty;
 use App\Models\Department;
 use App\Models\UserAddress;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use App\Interfaces\DoctorRepositoryInterface;
 use App\Http\Requests\Doctor\StoreDoctorRequest;
 use App\Http\Requests\Doctor\UpdateDoctorRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 class DoctorRepository implements DoctorRepositoryInterface
 {
@@ -33,6 +34,8 @@ class DoctorRepository implements DoctorRepositoryInterface
     public function store(StoreDoctorRequest $storeDoctorRequest)
     {
         $data = $storeDoctorRequest->validated();
+        Log::info($data);
+        // dd($data);
         try {
             DB::beginTransaction();
             if ($storeDoctorRequest->hasFile('image')) {
@@ -66,10 +69,10 @@ class DoctorRepository implements DoctorRepositoryInterface
             // Create Doctor
             Doctor::create([
                 'doctor_id' => $user->id,
-                'experience_years' => $data['experience_years'],
                 'qualification' => $data['qualification'],
                 'department_id' => $data['department_id'],
                 'specialty_id' => $data['specialty_id'],
+                'clinic_id' => $data['clinic_id'],
             ]);
 
             DB::commit();
@@ -77,6 +80,7 @@ class DoctorRepository implements DoctorRepositoryInterface
             return redirect()->route('doctors.index')->with(['successCreate' => 'Doctor Created Successfully']);
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error($e->getMessage());
             throw $e; // Handle errors
         }
     }
@@ -134,10 +138,10 @@ class DoctorRepository implements DoctorRepositoryInterface
                 'country' => $data['country']
             ]);
             $doctor->update([
-                'experience_years' => $data['experience_years'],
                 'qualification' => $data['qualification'],
                 'department_id' => $data['department_id'],
                 'specialty_id' => $data['specialty_id'],
+                'clinic_id' => $data['clinic_id'],
             ]);
             DB::commit();
 

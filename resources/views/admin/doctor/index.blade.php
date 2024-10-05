@@ -121,8 +121,8 @@
                                     colspan="1" aria-label="Phone: activate to sort column ascending"
                                     style="width: 141.234px;">Phone</th>
                                 <th class="sorting" tabindex="0" aria-controls="zero_config" rowspan="1"
-                                    colspan="1" aria-label="Years of Experience: activate to sort column ascending"
-                                    style="width: 141.234px;">Years of Experience</th>
+                                    colspan="1" aria-label="Clinic: activate to sort column ascending"
+                                    style="width: 141.234px;">Clinic</th>
                                 <th class="sorting" tabindex="0" aria-controls="zero_config" rowspan="1"
                                     colspan="1" aria-label="Address: activate to sort column ascending"
                                     style="width: 141.234px;">Address</th>
@@ -167,7 +167,7 @@
                                         <span class="usr-phone">{{ $doctor->user->phone }}</span>
                                     </td>
                                     <td>
-                                        <span class="usr-experience">{{ $doctor->experience_years }}</span>
+                                        <span class="usr-clinic">{{ $doctor->clinic->clinic_name }}</span>
                                     </td>
                                     <td>
                                         <span class="usr-address">

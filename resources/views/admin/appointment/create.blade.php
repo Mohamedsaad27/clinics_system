@@ -125,6 +125,45 @@
     @push('scripts')
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+        <script>
+            $(document).ready(function() {
+                $('#clinic_id').change(function() {
+                    var clinic = $(this).val();
+                    if (clinic) {
+                        $.ajax({
+                            url: '/admin/get-doctors/' + clinic,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(data) {
+                                $('#doctor_id').empty();
+                                $('#doctor_id').append(
+                                    '<option disabled selected>Select Doctor</option>');
+                                if (data.length > 0) {
+                                    $.each(data, function(key, doctor) {
+                                        $('#doctor').append('<option value="' + doctor.id +
+                                            '">' +
+                                            doctor.user.name + '</option>');
+                                    });
+                                } else {
+                                    $('#doctor').append(
+                                        '<option disabled>No doctors available</option>');
+                                }
+                            },
+                            error: function() {
+                                $('#doctor').empty();
+                                $('#doctor').append(
+                                    '<option disabled>Failed to load doctors</option>');
+                            }
+                        });
+                    } else {
+                        $('#doctor').empty();
+                        $('#doctor').append('<option disabled selected>Select a Clinic first</option>');
+                    }
+                });
+            });
+        </script>
+
+
         {{-- Get Clinics By Department --}}
         <script>
             $(document).ready(function() {

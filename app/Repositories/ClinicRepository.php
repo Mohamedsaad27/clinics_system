@@ -93,4 +93,9 @@ class ClinicRepository implements ClinicRepositoryInterface
             return redirect()->route('clinics.index')->with('errorDelete', 'Clinic deletion failed');
         }
     }
+    public function getClinics($department_id)
+    {
+        $clinics = Clinic::where('department_id', $department_id)->get();
+        return response()->json($clinics);
+    }
 }

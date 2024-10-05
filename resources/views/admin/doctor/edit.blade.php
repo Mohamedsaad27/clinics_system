@@ -99,6 +99,18 @@
                         </div>
 
                         <div class="mb-3">
+                            <label for="clinic_id" class="form-label">Clinic</label>
+                            <select class="form-select" id="clinic_id" name="clinic_id">
+                                <option value="">Select a clinic</option>
+                            </select>
+                            @error('clinic_id')
+                                <div class="form-text text-danger">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        
+                        <div class="mb-3">
                             <label for="gender" class="form-label">Gender</label>
                             <select class="form-select" id="gender" name="gender">
                                 <option value="">Select gender</option>
@@ -123,16 +135,6 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3">
-                            <label for="experience_years" class="form-label">Years of Experience</label>
-                            <input type="number" class="form-control" id="experience_years" name="experience_years"
-                                min="0" value="{{ $doctor->experience_years }}">
-                            @error('experience_years')
-                                <div class="form-text text-danger">
-                                    {{ $message }}
-                                </div>
-                            @enderror
-                        </div>
 
                         <div class="mb-3 row">
                             <div class="col-6">
@@ -157,7 +159,7 @@
                             </div>
                         </div>
 
-                       
+                        
 
                     </div>
 
@@ -169,4 +171,34 @@
         </div>
     </div>
 
+        
+    @push('scripts')
+        <script>
+            $(document).ready(function() {
+                $('#department_id').change(function() {
+                    var department_id = $(this).val();
+                    if(department_id) {
+                        $.ajax({
+                            url: "{{ url('get-clinics') }}/"+department_id,
+                            type: "GET",
+                            dataType: "json",
+                            success:function(data) {
+                                $('#clinic_id').empty();
+                                if($.isEmptyObject(data)) {
+                                    $('#clinic_id').append('<option value="">No clinics available for this department</option>');
+                                } else {
+                                    $.each(data, function(key, value) {
+                                        $('#clinic_id').append('<option value="'+ value.id +'">'+ value.clinic_name +'</option>');
+                                    });
+                                }
+                            }
+                        });
+                    } else {
+                        $('#clinic_id').empty();
+                        $('#clinic_id').append('<option value="">Select a clinic</option>');
+                    }
+                });
+            });
+        </script>
+    @endpush
 </x-admin-layout>

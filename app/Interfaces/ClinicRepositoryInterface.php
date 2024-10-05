@@ -15,4 +15,5 @@ interface ClinicRepositoryInterface
     public function edit(Clinic $clinic);
     public function update(UpdateClinicRequest $request, Clinic $clinic);
     public function destroy(Clinic $clinic);
+    public function getClinics($department_id);
 }

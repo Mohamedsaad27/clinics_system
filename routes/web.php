@@ -58,6 +58,7 @@ Route::prefix('admin')->as('admin.')->group(function () {
 
 Route::post('/doctors', [DoctorController::class, 'store'])->name('doctors.store');
 Route::get('patient/{id}/patient-history', [PatientController::class, 'getPatientHistory'])->name('patient.patientHistory');
+Route::get('/get-clinics/{department_id}', [ClinicController::class, 'getClinics']);
 
 
 

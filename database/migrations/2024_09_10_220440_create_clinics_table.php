@@ -22,6 +22,10 @@ return new class extends Migration
             $table->index('category_id');
             $table->index('location');
         });
+        Schema::table('doctors', function (Blueprint $table) {
+            $table->unsignedBigInteger('clinic_id');
+            $table->foreign('clinic_id')->references('id')->on('clinics')->onDelete('cascade');
+        });
     }
 
     /**

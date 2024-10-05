@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('doctor_id');
             $table->foreign('doctor_id')->references('id')->on('users');
-            $table->integer('experience_years');
-            $table->string('qualification');
+            $table->string('qualification')->nullable();
             $table->timestamps();
 
 

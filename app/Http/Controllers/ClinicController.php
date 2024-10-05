@@ -53,4 +53,8 @@ class ClinicController extends Controller
         return $this->clinicRepository->destroy($clinic);
     }
 
+    public function getClinics($department_id)
+    {
+        return $this->clinicRepository->getClinics($department_id);
+    }
 }

@@ -37,12 +37,12 @@ class StoreDoctorRequest extends FormRequest
             'national_id' => 'nullable|string|max:20',
             'gender' => 'nullable|in:male,female',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'experience_years' => 'required|integer|min:1',
             'qualification' => 'required|string|max:255',
             'department_id' => 'required|exists:departments,id',
             'specialty_id' => 'required|exists:specialties,id',
             'city' => 'required|string|max:100',
             'country' => 'nullable|string|max:100',
+            'clinic_id' => 'required|exists:clinics,id',
         ];
     }
     public function messages(): array
@@ -98,6 +98,9 @@ class StoreDoctorRequest extends FormRequest
 
             'country.string' => 'Country must be a valid string.',
             'country.max' => 'Country must not exceed 100 characters.',
+
+            'clinic_id.required' => 'Clinic is required.',
+            'clinic_id.exists' => 'Selected clinic is invalid.',
         ];
     }
 }

@@ -35,7 +35,7 @@ class Clinic extends Model
     }
     public function doctors()
     {
-        return $this->belongsToMany(Doctor::class, 'clinic_doctor');
+        return $this->hasMany(Doctor::class, 'clinic_id', 'id');
     }
     public function shifts()
     {

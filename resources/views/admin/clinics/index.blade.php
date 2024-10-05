@@ -87,17 +87,15 @@
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ asset($clinic->image ?? 'assets/images/profile/user-1.jpg') }}"
-                                            alt="avatar" width="35" class="rounded-circle">
-                                        <div class="ms-3">
+                                        <div class="ms-2">
                                             <h6 class="fw-semibold mb-0">{{ $clinic->clinic_name }}</h6>
                                         </div>
                                     </div>
                                 </td>
                                 <td>{{ $clinic->category->name }}</td>
-                                <td>{{ $clinic->department->name }}</td>
-                                <td>{{ $clinic->location }}</td>
-                                <td>{{ $clinic->contact_info }}</td>
+                                <td>{{ $clinic->department->name ?? 'N/A' }}</td>
+                                <td>{{ $clinic->location ? $clinic->location :  'N/A' }}</td>
+                                <td>{{ $clinic->contact_info ? $clinic->contact_info : 'N/A' }}</td>
                                 <td>
                                     <div class="action-btn d-flex">
                                         <a href="{{ route('clinics.show', $clinic->id) }}" class="text-info edit me-2">

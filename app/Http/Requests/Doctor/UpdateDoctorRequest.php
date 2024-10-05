@@ -31,10 +31,10 @@ class UpdateDoctorRequest extends FormRequest
             'password' => 'nullable|string|min:8',
             'department_id' => 'required|exists:departments,id',
             'specialty_id' => 'required|exists:specialties,id',
-            'experience_years' => 'required|string|max:255',
             'qualification' => 'required|string|max:255',
             'city' => 'required|string|max:255',
             'country' => 'required|string|max:255',
+            'clinic_id' => 'required|exists:clinics,id',
         ];
     }
 }
