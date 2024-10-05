@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\ClinicController;
+use App\Http\Controllers\MedicalDeviceController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\ProfileController;
@@ -34,7 +35,7 @@ Route::group(
     function () {
 
         //--------------------------------/* Resource Routes Doctor */--------------------------------
-    
+
         Route::resource('/doctors', DoctorController::class);
         Route::resource('/employees', EmployeeController::class);
         Route::resource('/patients', PatientController::class);
@@ -42,6 +43,7 @@ Route::group(
         Route::resource('/appointments', AppointmentController::class);
         Route::resource('/departments', DepartmentController::class);
         Route::resource('/shifts', ShiftController::class);
+        Route::resource('/devices', MedicalDeviceController::class);
         Route::get('/get-clinics/{department_id}', [AppointmentController::class, 'getClinics']);
         Route::get('/get-doctors/{clinic_id}', [AppointmentController::class, 'getDoctors']);
         Route::get('/get-shift/{doctor_id}', [AppointmentController::class, 'getShift']);
@@ -59,6 +61,7 @@ Route::prefix('admin')->as('admin.')->group(function () {
 Route::post('/doctors', [DoctorController::class, 'store'])->name('doctors.store');
 Route::get('patient/{id}/patient-history', [PatientController::class, 'getPatientHistory'])->name('patient.patientHistory');
 Route::get('/get-clinics/{department_id}', [ClinicController::class, 'getClinics']);
+Route::get('/patients/search', [PatientController::class, 'search'])->name('patients.search');
 
-
+Route::get('/admin/get-patients/{patient_name}', [PatientController::class, 'getPatients']);
 

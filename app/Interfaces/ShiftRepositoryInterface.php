@@ -2,9 +2,9 @@
 
 namespace App\Interfaces;
 
+use App\Http\Requests\Shift\StoreShiftRequest;
+use App\Http\Requests\Shift\UpdateShiftRequest;
 use App\Models\Shift;
-use App\Http\Requests\StoreShiftRequest;
-use App\Http\Requests\UpdateShiftRequest;
 
 interface ShiftRepositoryInterface
 {

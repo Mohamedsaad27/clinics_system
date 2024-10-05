@@ -2,12 +2,12 @@
 
 namespace App\Repositories;
 
+use App\Http\Requests\Shift\StoreShiftRequest;
+use App\Http\Requests\Shift\UpdateShiftRequest;
+use App\Interfaces\ShiftRepositoryInterface;
 use App\Models\Shift;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\StoreShiftRequest;
-use App\Http\Requests\UpdateShiftRequest;
-use App\Interfaces\ShiftRepositoryInterface;
 
 class ShiftRepository implements ShiftRepositoryInterface
 {

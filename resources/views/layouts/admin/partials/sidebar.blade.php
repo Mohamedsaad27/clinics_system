@@ -168,6 +168,26 @@
                         </li>
                     </ul>
                 </li>
+
+                <li class="sidebar-item">
+                    <a class="dropdown-toggle justify-content-between pe-4 sidebar-link sidebar-link primary-hover-bg {{ $currentRoute == 'admin.dashboard' ? 'primary-bg' : '' }}"
+                        data-bs-toggle="collapse" data-bs-target="#devicesSubmenu" aria-expanded="false">
+                        <div class="d-flex align-items-center">
+                            <span class="aside-icon p-2 bg-light-primary rounded-3">
+                                <i class="ti ti-device-laptop fs-7 text-warning"></i>
+                            </span>
+                            <span class="hide-menu ms-2 ps-1">Devices</span>
+                        </div>
+                    </a>
+                    <ul class="submenu collapse list-unstyled ms-21 me-5" id="devicesSubmenu">
+                        <li class="py-2 mb-1">
+                            <a class="text-dark p-2" href="{{ route('devices.create') }}">Add Device</a>
+                        </li>
+                        <li class="py-2 mb-1">
+                            <a class="text-dark p-2" href="{{ route('devices.index') }}">Device List</a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </nav>
     </div>

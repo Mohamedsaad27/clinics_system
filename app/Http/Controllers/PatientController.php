@@ -15,7 +15,6 @@ class PatientController extends Controller
     public function __construct(PatientRepositoryInterface $patientRepositoryInterface)
     {
         $this->patientRepository = $patientRepositoryInterface;
-
     }
     /**
      * Display a listing of the resource.
@@ -42,8 +41,7 @@ class PatientController extends Controller
         try {
             $this->patientRepository->store($request);
 
-            return redirect()->route('patients.index')->with('successDelete', 'Patient and related data deleted successfully.');
-
+            return redirect()->route('patients.index')->with('successDelete', 'Patient Created successfully.');
         } catch (\Exception $e) {
 
             return redirect()->route('patients.index')->with('errorDelete', "An error occurred while deleting the Patient :" . $e->getMessage());
@@ -75,7 +73,6 @@ class PatientController extends Controller
             $this->patientRepository->update($updatePatientRequest, $patient);
 
             return redirect()->route('patients.index')->with(['successUpdate' => 'Patient Updated Successfully']);
-
         } catch (\Exception $e) {
 
             return redirect()->route('patients.index')->with(['errorUpdate' => 'An error occurred while updating the patient: ' . $e->getMessage()]);
@@ -91,16 +88,25 @@ class PatientController extends Controller
             $this->patientRepository->destroy($patient);
 
             return redirect()->route('patients.index')->with('successDelete', 'patient and related data deleted successfully.');
-
         } catch (\Exception $e) {
 
             return redirect()->route('patients.index')->with('errorDelete', "An error occurred while deleting the patient :" . $e->getMessage());
         }
     }
-    public function getPatientHistory($id) {
+    public function getPatientHistory($id)
+    {
         $patient = User::find($id);
         $appointments = $patient->appointments()->with(['patient', 'doctor.user', 'clinic.department'])->get();
         return response()->json($appointments);
     }
 
+ 
+    public function getPatients($patient_name)
+    {
+        $patients = User::where('type', 'patient')
+            ->where('name', 'like', '%' . $patient_name . '%')
+            ->get(['id', 'name']);
+
+        return response()->json($patients);
+    }
 }
