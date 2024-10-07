@@ -4,7 +4,10 @@ namespace App\Repositories;
 use App\Models\Clinic;
 use App\Models\Category;
 use App\Models\Department;
+use App\Models\ClinicDevice;
+use App\Models\MedicalDevice;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Interfaces\ClinicRepositoryInterface;
 use App\Http\Requests\Clinic\StoreClinicRequest;
 use App\Http\Requests\Clinic\UpdateClinicRequest;
@@ -13,30 +16,34 @@ class ClinicRepository implements ClinicRepositoryInterface
 {
     public function index()
     {
-        $clinics = Clinic::with('category')->get();
+        $clinics = Clinic::with('category','devices','department')->get();
         return view('admin.clinics.index', compact('clinics'));
     }
     public function create()
     {
         $categories = Category::all();
         $departments = Department::all();
-
-        return view('admin.clinics.create', compact('categories', 'departments'));
+        $medical_devices = MedicalDevice::all();
+        return view('admin.clinics.create', compact('categories', 'departments', 'medical_devices'));
     }
     public function store(StoreClinicRequest $request)
     {
-        $data = $request->validated();
+        $validatedData = $request->validated();
         try {
             DB::beginTransaction();
+            $clinic = Clinic::create($validatedData);
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 $imageName = 'assets/imgs/clinics/' . time() . '.' . $image->getClientOriginalExtension();
                 $image->move(public_path('assets/imgs/clinics'), $imageName);
-                $data['image'] = $imageName;
-            } else {
-                $data['image'] = null;
+                $clinic->update(['image' => $imageName]);
             }
-            $clinic = Clinic::create($data);
+            foreach ($validatedData['medical_devices'] as $deviceId) {
+                ClinicDevice::create([
+                    'clinic_id' => $clinic->id,
+                    'device_id' => $deviceId,
+                ]);
+            }
             DB::commit();
             return redirect()->route('clinics.index')->with('successCreate', 'Clinic created successfully');
         } catch (\Exception $e) {

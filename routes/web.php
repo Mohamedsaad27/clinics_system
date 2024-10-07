@@ -62,6 +62,6 @@ Route::post('/doctors', [DoctorController::class, 'store'])->name('doctors.store
 Route::get('patient/{id}/patient-history', [PatientController::class, 'getPatientHistory'])->name('patient.patientHistory');
 Route::get('/get-clinics/{department_id}', [ClinicController::class, 'getClinics']);
 Route::get('/patients/search', [PatientController::class, 'search'])->name('patients.search');
-
 Route::get('/admin/get-patients/{patient_name}', [PatientController::class, 'getPatients']);
+Route::get('/admin/get-medical-device/{clinic_id}', [MedicalDeviceController::class, 'getMedicalDeviceByClinic']);
 

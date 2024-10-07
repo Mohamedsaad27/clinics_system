@@ -15,4 +15,5 @@ interface MedicalDeviceRepositoryInterface
     public function edit($id);
     public function update(UpdateMedicalDeviceRequest $updateMedicalDeviceRequest, $id);
     public function destroy($id);
+    public function getMedicalDeviceByClinic($clinic_id);
 }

@@ -17,6 +17,6 @@ class MedicalDevice extends Model
     }
     public function clinic()
     {
-        return $this->belongsToMany(Clinic::class,'device_clinic');
+        return $this->belongsToMany(Clinic::class,'device_clinic', 'device_id', 'clinic_id');
     }
 }

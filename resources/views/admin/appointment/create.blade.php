@@ -28,7 +28,8 @@
                 <div class="col-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="mb-3">
                         <label for="patient_name" class="form-label">Patient Name</label>
-                        <input type="text" class="form-control" id="patient_name" name="patient_name" required placeholder="Patient Name">
+                        <input type="text" class="form-control" id="patient_name" name="patient_name" required
+                            placeholder="Patient Name">
                         <div id="patient-list" class="patient-list-style"></div>
                         @error('patient_name')
                             <div class="text-danger">{{ $message }}</div>
@@ -39,7 +40,8 @@
                 <div class="col-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required placeholder="Patient Email">
+                        <input type="email" class="form-control" id="email" name="email" required
+                            placeholder="Patient Email">
                         @error('email')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -49,7 +51,8 @@
                 <div class="col-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone</label>
-                        <input type="text" class="form-control" id="phone" name="phone" required placeholder="Patient Phone">
+                        <input type="text" class="form-control" id="phone" name="phone" required
+                            placeholder="Patient Phone">
                         @error('phone')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -59,7 +62,7 @@
                 <div class="col-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="mb-3">
                         <label for="gender" class="form-label">Gender</label>
-                        <select class="form-select" id="gender" name="gender" required placeholder="Patient Gender"  >
+                        <select class="form-select" id="gender" name="gender" required placeholder="Patient Gender">
                             <option value="male">Male</option>
                             <option value="female">Female</option>
                         </select>
@@ -115,23 +118,20 @@
                     </div>
                 </div>
 
-                {{-- <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                <div class="col-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="mb-3">
-                        <label for="device_id" class="form-label">Devices</label>
-                        <select class="form-select" id="device_id" name="device_id" required>
-                            <option value="">Select a MedicalDevice</option>
-                            @foreach ($devices as $device)
-                                <option value="{{ $device->id }}"
-                                    {{ old('device_id') == $device->id ? 'selected' : '' }}>
-                                    {{ $device->name }}
-                                </option>
-                            @endforeach
+                        <label for="doctor" class="form-label">Medical Devices</label>
+                        <select class="form-select" id="device" name="medical_device" required>
+                            <option selected value="">Select a Medical Devices</option>
                         </select>
-                        @error('device_id')
+                        <div class="mb-3 bg-success rounded p-2 d-none" id="shift-container">
+                            <p class="mb-0 text-white" id="shift"></p>
+                        </div>
+                        @error('medical_device')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-                </div> --}}
+                </div>
 
                 <div class="col-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="mb-3">
@@ -224,7 +224,9 @@
                                 $('#patient-list').empty();
                                 if (data.length > 0) {
                                     $.each(data, function(key, patient) {
-                                        $('#patient-list').append('<div><a href="#" class="text-dark">' + patient.name + '</a></div>');
+                                        $('#patient-list').append(
+                                            '<div><a href="#" class="text-dark">' +
+                                            patient.name + '</a></div>');
                                     });
                                     $('#patient-list').slideDown();
                                 } else {
@@ -254,8 +256,8 @@
             });
         </script>
 
-         {{-- Get Doctor By Clinic --}}
-         <script>
+        {{-- Get Doctor By Clinic --}}
+        <script>
             $(document).ready(function() {
                 $('#clinic').change(function() {
                     var clinic_id = $(this).val();
@@ -288,6 +290,104 @@
                     } else {
                         $('#doctor').empty();
                         $('#doctor').append('<option disabled selected>Select a Clinic first</option>');
+                    }
+                });
+            });
+        </script>
+        {{-- Get Medical Device By Clinic --}}
+        <script>
+            $(document).ready(function() {
+                $('#clinic').change(function() {
+                    var clinic_id = $(this).val();
+                    if (clinic_id) {
+                        $.ajax({
+                            url: '/admin/get-medical-device/' + clinic_id,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(data) {
+                                $('#device').empty();
+                                $('#device').append(
+                                    '<option disabled selected>Select Medical Device</option>');
+                                if (data.length > 0) {
+                                    $.each(data, function(key, device) {
+                                        $('#device').append('<option value="' + device
+                                            .device_id + '">' + device.device_name +
+                                            '</option>');
+                                    });
+                                } else {
+                                    $('#device').append(
+                                        '<option disabled>No medical devices available</option>'
+                                        );
+                                }
+                            },
+                            error: function() {
+                                $('#device').empty();
+                                $('#device').append(
+                                    '<option disabled>Failed to load medical devices</option>');
+                            }
+                        });
+                    } else {
+                        $('#device').empty();
+                        $('#device').append('<option disabled selected>Select a Clinic first</option>');
+                    }
+                });
+            });
+        </script>
+        {{-- Get Shift Doctor --}}
+
+        <script>
+            $(document).ready(function() {
+                $('#doctor').change(function() {
+                    var doctor_id = $(this).val();
+                    if (doctor_id) {
+                        $.ajax({
+                            url: '/admin/get-shift/' + doctor_id,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(data) {
+                                $('#shift').empty();
+                                $('#shift-container').removeClass('d-none');
+                                if (data) {
+                                    $('#shift').empty();
+                                    $('#shift-container').removeClass(
+                                        'd-none');
+                                    $.each(data, function(key, shift) {
+                                        $('#shift').append(
+                                            'Shift Doctor Every: <span class="fw-bold text-blue">' +
+                                            shift.shift_day_during_month +
+                                            '</span> in <span class="fw-bold text-blue">' +
+                                            shift.shift_month + '</span> Price: ' +
+                                            '<span class="fw-bold text-blue">' +
+                                            shift.price_appoinment +
+                                            '</span> from <span class="fw-bold text-blue">' +
+                                            shift.start_time +
+                                            '</span> to <span class="fw-bold text-blue">' +
+                                            shift.end_time + '</span>'
+                                        );
+                                        $('#shift').append(
+                                            '<input type="hidden" name="shift_id" value="' +
+                                            shift.id + '">'
+                                        );
+                                    });
+                                } else {
+                                    $('#shift').append(
+                                        '<span class="text-white">No shifts available for this doctor</span>'
+                                    );
+                                }
+                            },
+                            error: function() {
+                                $('#shift').empty();
+                                $('#shift-container').removeClass(
+                                    'd-none');
+                                $('#shift').append(
+                                    '<span class="text-white">Failed to load shifts. Please try again.</span>'
+                                );
+                            }
+                        });
+                    } else {
+                        $('#shift').empty();
+                        $('#shift-container').addClass('d-none'); // Hide the container if no doctor is selected
+                        $('#shift').append('<span class="text-white">Select a Doctor first</span>');
                     }
                 });
             });

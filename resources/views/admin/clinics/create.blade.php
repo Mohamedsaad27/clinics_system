@@ -28,7 +28,7 @@
                 <div class="col-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="mb-3">
                         <label for="clinic_name" class="form-label">Clinic Name</label>
-                        <input type="text" class="form-control" id="clinic_name" name="clinic_name" PLACEHOLDER="Enter clinic name"
+                        <input type="text" class="form-control" id="clinic_name" name="clinic_name" placeholder="Enter clinic name"
                             value="{{ old('clinic_name') }}" required>
                         @error('clinic_name')
                             <div class="text-danger">{{ $message }}</div>
@@ -50,14 +50,12 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
-
                     <div class="mb-3">
                         <label for="department" class="form-label">Departments</label>
                         <select class="form-select" id="department" name="department_id" required>
                             <option value="">Select a Department</option>
                             @foreach ($departments as $department)
-                                <option value="{{ $department->id }}"
-                                    {{ old('department_id') == $department->id ? 'selected' : '' }}>
+                                <option value="{{ $department->id }}" {{ old('department_id') == $department->id ? 'selected' : '' }}>
                                     {{ $department->name }}
                                 </option>
                             @endforeach
@@ -66,6 +64,22 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
+                    <div class="mb-3">
+                        <label for="medical_devices" class="form-label">Medical Devices</label>
+                        <select class="form-select" id="medical_devices" name="medical_devices[]" multiple required>
+                            <option disabled selected value="">Select medical devices</option>
+                            @foreach ($medical_devices as $device)
+                                <option value="{{ $device->id }}" {{ in_array($device->id, old('medical_devices', [])) ? 'selected' : '' }}>
+                                    {{ $device->device_name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('medical_devices')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                    </div>
+                
+                    
 
                 </div>
 
@@ -74,7 +88,7 @@
 
                     <div class="mb-3">
                         <label for="location" class="form-label">Location</label>
-                        <input type="text" class="form-control" id="location" name="location"  PLACEHOLDER="Enter clinic location"
+                        <input type="text" class="form-control" id="location" name="location" placeholder="Enter clinic location"
                             value="{{ old('location') }}" required>
                         @error('location')
                             <div class="text-danger">{{ $message }}</div>
@@ -83,7 +97,7 @@
 
                     <div class="mb-3">
                         <label for="contact_info" class="form-label">Phone</label>
-                        <input type="text" class="form-control" id="contact_info" name="contact_info"  PLACEHOLDER="Enter clinic phone"
+                        <input type="text" class="form-control" id="contact_info" name="contact_info" placeholder="Enter clinic phone"
                             value="{{ old('phone') }}" required>
                         @error('contact_info')
                             <div class="text-danger">{{ $message }}</div>
@@ -98,4 +112,14 @@
         </div>
     </div>
 
+    @push('scripts')
+        <script>
+            $(document).ready(function() {
+                $('#medical_devices').select2({
+                    placeholder: 'Select medical devices',
+                    theme: 'bootstrap-5'
+                });
+            });
+        </script>
+    @endpush
 </x-admin-layout>

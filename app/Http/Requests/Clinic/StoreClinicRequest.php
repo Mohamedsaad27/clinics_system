@@ -28,6 +28,8 @@ class StoreClinicRequest extends FormRequest
             'category_id' => 'required|exists:categories,id',
             'department_id' => 'required|exists:departments,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'medical_devices' => 'required|array',
+            'medical_devices.*' => 'exists:medical_devices,id',
         ];
     }
 }

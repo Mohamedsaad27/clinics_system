@@ -37,4 +37,8 @@ class MedicalDeviceController extends Controller
     public function destroy($id){
         return $this->medicalDeviceRepository->destroy($id);
     }
+    public function getMedicalDeviceByClinic($clinic_id)
+    {
+        return $this->medicalDeviceRepository->getMedicalDeviceByClinic($clinic_id);
+    }
 }

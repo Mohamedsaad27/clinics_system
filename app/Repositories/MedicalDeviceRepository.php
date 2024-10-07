@@ -6,6 +6,7 @@ use App\Http\Requests\Device\StoreMedicalDeviceRequest;
 use App\Http\Requests\Device\UpdateMedicalDeviceRequest;
 use App\Interfaces\MedicalDeviceRepositoryInterface;
 use App\Models\MedicalDevice;
+use Illuminate\Support\Facades\DB;
 
 class MedicalDeviceRepository implements MedicalDeviceRepositoryInterface
 {
@@ -52,9 +53,18 @@ class MedicalDeviceRepository implements MedicalDeviceRepositoryInterface
     {
         try{
             MedicalDevice::find($id)->delete();
-            return redirect()->route('admin.devices.index')->with('successDelete','Medical Device deleted successfully');
+            return redirect()->route('devices.index')->with('successDelete','Medical Device deleted successfully');
         }catch(\Exception $e){
             return redirect()->back()->with('error',$e->getMessage());
         }
     }
+    public function getMedicalDeviceByClinic($clinic_id) {
+        $devices = DB::table('clinic_device')
+            ->join('medical_devices', 'clinic_device.device_id', '=', 'medical_devices.id')
+            ->where('clinic_device.clinic_id', $clinic_id)
+            ->select('clinic_device.id', 'medical_devices.device_name', 'medical_devices.id as device_id')
+            ->get();
+        return response()->json($devices);
+    }
+
 }
