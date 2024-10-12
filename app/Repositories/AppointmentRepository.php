@@ -142,7 +142,7 @@ class AppointmentRepository implements AppointmentRepositoryInterface
         $shift = Shift::where('doctor_id', $doctorId)->get();
 
         if ($shift->isEmpty()) {
-            return response()->json([], 200);
+            return response()->json(['message' => 'No shifts found'], 200);
         }
 
         $formattedShifts = $shift->map(function ($shift) {

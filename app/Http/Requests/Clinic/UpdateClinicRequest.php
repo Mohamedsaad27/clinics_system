@@ -26,6 +26,8 @@ class UpdateClinicRequest extends FormRequest
             'location' => 'required|string|max:255',
             'contact_info' => 'required|string|max:255',
             'category_id' => 'required|exists:categories,id',
+            'medical_devices' => 'nullable|array',
+            'medical_devices.*' => 'exists:medical_devices,id',
         ];
     }
 }

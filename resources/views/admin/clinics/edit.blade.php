@@ -74,6 +74,7 @@
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+        </div>  
 
             <div class="mb-3">
                 <label for="contact_info" class="form-label">Phone</label>
@@ -83,6 +84,40 @@
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="mb-3">  
+                <label class="form-label">Medical Devices</label>  
+                {{-- <div class="form-check">  
+                    <em>(Select multiple devices)</em>  
+                </div>   --}}  
+                <div class="form-control" style="max-height: 250px; overflow-y: auto; 
+                overflow-x: hidden;">  
+                    @if($medical_devices->isEmpty())  
+                        <p>No devices to add</p>  
+                    @else  
+                        <div class="row">  
+                            @foreach ($medical_devices as $index => $device)  
+                                <div class="col-3">   
+                                    <div class="form-check">  
+                                        <input class="form-check-input" type="checkbox"   
+                                               id="device_{{ $device->id }}"   
+                                               name="medical_devices[]"   
+                                               value="{{ $device->id }}"  
+                                               @checked(in_array($device->id, old('medical_devices', $clinic->devices()->pluck('device_id')->toArray())))>  
+                                        <label class="form-check-label" for="device_{{ $device->id }}">  
+                                            {{ $device->device_name }}  
+                                        </label>  
+                                    </div>  
+                                </div>  
+                                @if (($index + 1) % 4 == 0 && $index < count($medical_devices) - 1)  
+                                    </div><div class="row">  
+                                @endif  
+                            @endforeach  
+                        </div>  
+                    @endif  
+                </div>  
+                @error('medical_devices')  
+                    <div class="text-danger">{{ $message }}</div>  
+            @enderror  
         </div>
 
         <div class="col-12">

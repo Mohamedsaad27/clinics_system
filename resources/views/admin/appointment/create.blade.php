@@ -106,11 +106,13 @@
                 <div class="col-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="mb-3">
                         <label for="doctor" class="form-label">Doctors</label>
-                        <select class="form-select" id="doctor" name="doctor_id" required>
-                            <option selected value="">Select a Doctor</option>
-                        </select>
-                        <div class="mb-3 bg-success rounded p-2 d-none" id="shift-container">
-                            <p class="mb-0 text-white" id="shift"></p>
+                        <div class="input-group">
+                            <select class="form-select" id="doctor" name="doctor_id" required>
+                                <option selected value="">Select a Doctor</option>
+                            </select>
+                            <button class="btn btn-outline-secondary" type="button" id="viewShiftsBtn" disabled>
+                                View Shifts
+                            </button>
                         </div>
                         @error('doctor_id')
                             <div class="text-danger">{{ $message }}</div>
@@ -168,7 +170,35 @@
             </form>
         </div>
     </div>
-
+    <div class="modal fade" id="doctorShiftsModal" tabindex="-1" aria-labelledby="doctorShiftsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="doctorShiftsModalLabel">
+                        <i class="fas fa-calendar-alt me-2"></i>Doctor Shifts
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover" id="doctorShiftsTable">
+                            <thead>
+                                <tr>
+                                    <th><i class="fas fa-calendar-day me-2"></i>Date</th>
+                                    <th><i class="fas fa-clock me-2"></i>Start Time</th>
+                                    <th><i class="fas fa-hourglass-end me-2"></i>End Time</th>
+                                    <th><i class="fas fa-dollar-sign me-2"></i>Price</th>
+                                </tr>
+                            </thead>
+                            <tbody id="doctorShiftsContent">
+                                <!-- Shifts will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     @push('scripts')
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         {{-- Get Clinics By Department --}}
@@ -209,7 +239,6 @@
                 });
             });
         </script>
-
         {{-- Patient Name Autocomplete --}}
         <script>
             $(document).ready(function() {
@@ -255,7 +284,6 @@
                 });
             });
         </script>
-
         {{-- Get Doctor By Clinic --}}
         <script>
             $(document).ready(function() {
@@ -334,60 +362,47 @@
             });
         </script>
         {{-- Get Shift Doctor --}}
-
         <script>
             $(document).ready(function() {
-                $('#doctor').change(function() {
-                    var doctor_id = $(this).val();
-                    if (doctor_id) {
+                const viewShiftsBtn = $('#viewShiftsBtn');
+                const doctorSelect = $('#doctor');
+                const shiftsModal = new bootstrap.Modal(document.getElementById('doctorShiftsModal'));
+
+                doctorSelect.change(function() {
+                    viewShiftsBtn.prop('disabled', !$(this).val());
+                });
+
+                viewShiftsBtn.click(function() {
+                    const doctorId = doctorSelect.val();
+                    if (doctorId) {
                         $.ajax({
-                            url: '/admin/get-shift/' + doctor_id,
+                            url: '/admin/get-shift/' + doctorId,
                             type: 'GET',
                             dataType: 'json',
                             success: function(data) {
-                                $('#shift').empty();
-                                $('#shift-container').removeClass('d-none');
-                                if (data) {
-                                    $('#shift').empty();
-                                    $('#shift-container').removeClass(
-                                        'd-none');
-                                    $.each(data, function(key, shift) {
-                                        $('#shift').append(
-                                            'Shift Doctor Every: <span class="fw-bold text-blue">' +
-                                            shift.shift_day_during_month +
-                                            '</span> in <span class="fw-bold text-blue">' +
-                                            shift.shift_month + '</span> Price: ' +
-                                            '<span class="fw-bold text-blue">' +
-                                            shift.price_appoinment +
-                                            '</span> from <span class="fw-bold text-blue">' +
-                                            shift.start_time +
-                                            '</span> to <span class="fw-bold text-blue">' +
-                                            shift.end_time + '</span>'
-                                        );
-                                        $('#shift').append(
-                                            '<input type="hidden" name="shift_id" value="' +
-                                            shift.id + '">'
-                                        );
+                                let shiftsHtml = '';
+                                if (data.length > 0) {
+                                    data.forEach(function(shift) {
+                                        shiftsHtml += `
+                                            <tr>
+                                                <td>${shift.shift_day_during_month} ${shift.shift_month}</td>
+                                                <td>${shift.start_time}</td>
+                                                <td>${shift.end_time}</td>
+                                                <td>${shift.price_appoinment}</td>
+                                            </tr>
+                                        `;
                                     });
                                 } else {
-                                    $('#shift').append(
-                                        '<span class="text-white">No shifts available for this doctor</span>'
-                                    );
+                                    shiftsHtml = '<tr><td colspan="4" class="text-center">No shifts available for this doctor.</td></tr>';
                                 }
+                                $('#doctorShiftsContent').html(shiftsHtml);
+                                shiftsModal.show();
                             },
                             error: function() {
-                                $('#shift').empty();
-                                $('#shift-container').removeClass(
-                                    'd-none');
-                                $('#shift').append(
-                                    '<span class="text-white">Failed to load shifts. Please try again.</span>'
-                                );
+                                $('#doctorShiftsContent').html('<tr><td colspan="4" class="text-center text-danger">Failed to load doctor shifts.</td></tr>');
+                                shiftsModal.show();
                             }
                         });
-                    } else {
-                        $('#shift').empty();
-                        $('#shift-container').addClass('d-none'); // Hide the container if no doctor is selected
-                        $('#shift').append('<span class="text-white">Select a Doctor first</span>');
                     }
                 });
             });

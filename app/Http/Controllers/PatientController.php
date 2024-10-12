@@ -107,7 +107,6 @@ class PatientController extends Controller
         $patients = User::where('type', 'patient')
             ->where('name', 'like', '%' . $patient_name . '%')
             ->get(['id', 'name']);
-        DB
         return response()->json($patients);
     }
 }

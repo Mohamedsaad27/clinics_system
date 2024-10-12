@@ -53,13 +53,14 @@ class ClinicRepository implements ClinicRepositoryInterface
     }
     public function show(Clinic $clinic)
     {
-        $clinic->load('doctors', 'appointments');
-        return view('admin.clinics.show', compact('clinic'));
+        $clinic->load('doctors', 'appointments', 'devices');
+        return view('admin.clinics.show', compact('clinic', 'medical_devices'));
     }
     public function edit(Clinic $clinic)
     {
         $categories = Category::all();
-        return view('admin.clinics.edit', compact('clinic', 'categories'));
+        $medical_devices = MedicalDevice::all();
+        return view('admin.clinics.edit', compact('clinic', 'categories', 'medical_devices'));
     }
     public function update(UpdateClinicRequest $request, Clinic $clinic)
     {
@@ -76,6 +77,26 @@ class ClinicRepository implements ClinicRepositoryInterface
                 $data['image'] = $imageName;
             } else {
                 $data['image'] = null;
+            }
+            if($request->has('medical_devices')){
+                $existingDevices = $clinic->devices()->pluck('device_id')->toArray();
+                $newDevices = $data['medical_devices'];
+                $devicesToAdd = array_diff($newDevices, $existingDevices);
+                $devicesToRemove = array_diff($existingDevices, $newDevices);
+
+                foreach($devicesToAdd as $deviceId){
+                    ClinicDevice::create([
+                        'clinic_id' => $clinic->id,
+                        'device_id' => $deviceId,
+                    ]);
+                }
+
+                foreach($devicesToRemove as $deviceId){
+                    ClinicDevice::where([
+                        ['clinic_id', $clinic->id],
+                        ['device_id', $deviceId],
+                    ])->delete();
+                }
             }
             $clinic->update($data);
             DB::commit();
