@@ -7,6 +7,7 @@ use App\Http\Requests\Patient\UpdatePatientRequest;
 use App\Interfaces\PatientRepositoryInterface;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PatientController extends Controller
 {
@@ -106,7 +107,7 @@ class PatientController extends Controller
         $patients = User::where('type', 'patient')
             ->where('name', 'like', '%' . $patient_name . '%')
             ->get(['id', 'name']);
-
+        DB
         return response()->json($patients);
     }
 }
