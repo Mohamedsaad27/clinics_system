@@ -2,16 +2,19 @@
 
 namespace App\Repositories;
 
+use App\Models\User;
+use App\Models\Shift;
+use App\Models\Clinic;
+use App\Models\Doctor;
+use App\Models\Department;
+use App\Models\Appointment;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
+use App\Interfaces\AppointmentRepositoryInterface;
 use App\Http\Requests\Appointment\StoreAppointmentRequest;
 use App\Http\Requests\Appointment\UpdateAppointmentRequest;
-use App\Interfaces\AppointmentRepositoryInterface;
-use App\Models\Appointment;
-use App\Models\Clinic;
-use App\Models\Department;
-use App\Models\Doctor;
-use App\Models\Shift;
-use App\Models\User;
-use Illuminate\Support\Carbon;
 
 class AppointmentRepository implements AppointmentRepositoryInterface
 {
@@ -45,10 +48,22 @@ class AppointmentRepository implements AppointmentRepositoryInterface
      * @param StoreAppointmentRequest $storeAppointmentRequest
      * @return Appointment
      */
-    public function store(StoreAppointmentRequest $storeAppointmentRequest)
+    public function store(Request $request)
     {
-        $data = $storeAppointmentRequest->validated();
+        $data = $request->all();
         try {
+            $patient = User::where('name', $data['patient_name'])->where('type', 'patient')->first();
+            if(!$patient){
+                $patient = User::create([
+                    'name' => $data['patient_name'],
+                    'email' => $data['email'],
+                    'phone' => $data['phone'],
+                    'password' => Hash::make($data['phone']),
+                    'type' => 'patient',
+                    'gender' => $data['gender'],
+                ]);
+            }
+            $data['patient_id'] = $patient->id;
             Appointment::create($data);
             return redirect()->route('appointments.index')->with('successCreate', 'Appointment created successfully.');
         } catch (\Exception $e) {
@@ -110,7 +125,7 @@ class AppointmentRepository implements AppointmentRepositoryInterface
          }
     }
 
-    
+
     public function getClinics($departmentId)
     {
         $clinics = Clinic::where('department_id', $departmentId)->get();

@@ -34,9 +34,9 @@ class AppointmentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAppointmentRequest $storeAppointmentRequest)
+    public function store(Request $request)
     {
-        return $this->appointmentRepository->store($storeAppointmentRequest);
+        return $this->appointmentRepository->store($request);
     }
 
     /**

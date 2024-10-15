@@ -1,4 +1,50 @@
 <x-admin-layout>
+    <style>
+        /* Ensure the parent container is positioned relative for proper dropdown alignment */
+        .position-relative {
+            position: relative;
+        }
+    
+        /* Autocomplete list container directly under the input field */
+        .patient-list-style {
+            position: absolute;
+            top: 100%; /* Aligns the list just below the input */
+            left: 0;
+            width: 100%;
+            max-height: 200px;
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            z-index: 1000;
+            display: none; /* Hidden by default */
+        }
+    
+        /* Individual autocomplete item */
+        .patient-list-style div {
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+    
+        /* Hover effect for items */
+        .patient-list-style div:hover {
+            background-color: #f1f1f1;
+        }
+    
+        /* Links inside the autocomplete list */
+        .patient-list-style a {
+            color: #000;
+            text-decoration: none;
+        }
+    
+        .patient-list-style a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    
+    
+
 
     {{-- Start Breadcrumb --}}
     <div class="card bg-light-info shadow-none position-relative overflow-hidden">
@@ -25,17 +71,18 @@
         <div class="card-body">
             <form class="row" action="{{ route('appointments.store') }}" method="POST">
                 @csrf
-                <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                <div class="col-12 col-md-6 col-lg-6 col-xl-6 position-relative">
                     <div class="mb-3">
                         <label for="patient_name" class="form-label">Patient Name</label>
                         <input type="text" class="form-control" id="patient_name" name="patient_name" required
                             placeholder="Patient Name">
-                        <div id="patient-list" class="patient-list-style"></div>
+                        <div id="patient-list" class="patient-list-style"></div> <!-- Suggestions container -->
                         @error('patient_name')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
+                
 
                 <div class="col-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="mb-3">
@@ -103,7 +150,7 @@
                     </div>
                 </div>
 
-                <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                {{-- <div class="col-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="mb-3">
                         <label for="doctor" class="form-label">Doctors</label>
                         <div class="input-group">
@@ -118,8 +165,32 @@
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
+                </div> --}}
+                <div class="col-12 col-md-6 col-lg-6 col-xl-6">
+                    <div class="mb-3">
+                        <label for="doctor" class="form-label">Doctors</label>
+                        <div class="input-group">
+                            <select class="form-select" id="doctor" name="doctor_id" required>
+                                <option selected value="">Select a Doctor</option>
+                            </select>
+                            <button class="btn btn-outline-secondary" type="button" id="viewShiftsBtn" disabled>
+                                View Shifts
+                            </button>
+                        </div>
+                        @error('doctor_id')
+                            <div class="text-danger">{{ $message }}</div>
+                        @enderror
+                
+                        <!-- Styled Shift Display -->
+                        <div class="mt-2">
+                            <div class="alert alert-info d-none" id="shift-container">
+                                <strong>Selected Shift:</strong>
+                                <p class="mb-0" id="shift-details"></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
+                
                 <div class="col-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="mb-3">
                         <label for="doctor" class="form-label">Medical Devices</label>
@@ -363,50 +434,91 @@
         </script>
         {{-- Get Shift Doctor --}}
         <script>
-            $(document).ready(function() {
-                const viewShiftsBtn = $('#viewShiftsBtn');
-                const doctorSelect = $('#doctor');
-                const shiftsModal = new bootstrap.Modal(document.getElementById('doctorShiftsModal'));
-
-                doctorSelect.change(function() {
-                    viewShiftsBtn.prop('disabled', !$(this).val());
-                });
-
-                viewShiftsBtn.click(function() {
-                    const doctorId = doctorSelect.val();
-                    if (doctorId) {
-                        $.ajax({
-                            url: '/admin/get-shift/' + doctorId,
-                            type: 'GET',
-                            dataType: 'json',
-                            success: function(data) {
-                                let shiftsHtml = '';
-                                if (data.length > 0) {
-                                    data.forEach(function(shift) {
-                                        shiftsHtml += `
-                                            <tr>
-                                                <td>${shift.shift_day_during_month} ${shift.shift_month}</td>
-                                                <td>${shift.start_time}</td>
-                                                <td>${shift.end_time}</td>
-                                                <td>${shift.price_appoinment}</td>
-                                            </tr>
-                                        `;
-                                    });
-                                } else {
-                                    shiftsHtml = '<tr><td colspan="4" class="text-center">No shifts available for this doctor.</td></tr>';
-                                }
-                                $('#doctorShiftsContent').html(shiftsHtml);
-                                shiftsModal.show();
-                            },
-                            error: function() {
-                                $('#doctorShiftsContent').html('<tr><td colspan="4" class="text-center text-danger">Failed to load doctor shifts.</td></tr>');
-                                shiftsModal.show();
-                            }
-                        });
-                    }
-                });
+        $(document).ready(function() {
+            const viewShiftsBtn = $('#viewShiftsBtn');
+            const doctorSelect = $('#doctor');
+            const shiftsModal = new bootstrap.Modal(document.getElementById('doctorShiftsModal'));
+            let selectedShift = null; // Variable to store selected shift details
+        
+            doctorSelect.change(function() {
+                viewShiftsBtn.prop('disabled', !$(this).val());
             });
-        </script>
+        
+            // View shifts for the selected doctor
+            viewShiftsBtn.click(function() {
+                const doctorId = doctorSelect.val();
+                if (doctorId) {
+                    $.ajax({
+                        url: '/admin/get-shift/' + doctorId,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(data) {
+                            let shiftsHtml = '';
+                            if (data.length > 0) {
+                                data.forEach(function(shift) {
+                                    shiftsHtml += `
+                                        <tr data-shift='${JSON.stringify(shift)}' class="select-shift">
+                                            <td>${shift.shift_day_during_month} ${shift.shift_month}</td>
+                                            <td>${shift.start_time}</td>
+                                            <td>${shift.end_time}</td>
+                                            <td>${shift.price_appoinment}</td>
+                                        </tr>
+                                    `;
+                                });
+                            } else {
+                                shiftsHtml = '<tr><td colspan="4" class="text-center">No shifts available for this doctor.</td></tr>';
+                            }
+                            $('#doctorShiftsContent').html(shiftsHtml);
+                            shiftsModal.show();
+                        },
+                        error: function() {
+                            $('#doctorShiftsContent').html('<tr><td colspan="4" class="text-center text-danger">Failed to load doctor shifts.</td></tr>');
+                            shiftsModal.show();
+                        }
+                    });
+                }
+            });
+        
+            // Capture the shift selection
+            $(document).on('click', '.select-shift', function() {
+                selectedShift = $(this).data('shift'); // Store the selected shift details
+                $('#shift-container').removeClass('d-none');
+                $('#shift-details').html(`<strong>Date:</strong> ${selectedShift.shift_day_during_month} ${selectedShift.shift_month}  <strong>Time:</strong> ${selectedShift.start_time} - ${selectedShift.end_time} <strong>Price:</strong> ${selectedShift.price_appoinment}`);
+                shiftsModal.hide();
+            });
+            // Add shift details to the form before submitting
+            $('form').submit(function(event) {
+                if (selectedShift) {
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: 'shift_id',
+                        value: selectedShift.id
+                    }).appendTo($(this));
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: 'shift_date',
+                        value: selectedShift.shift_day_during_month + ' ' + selectedShift.shift_month
+                    }).appendTo($(this));
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: 'shift_start_time',
+                        value: selectedShift.start_time
+                    }).appendTo($(this));
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: 'shift_end_time',
+                        value: selectedShift.end_time
+                    }).appendTo($(this));
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: 'shift_price',
+                        value: selectedShift.price_appoinment
+                    }).appendTo($(this));
+                }
+            });
+        });
+    </script>
+
     @endpush
 
 </x-admin-layout>

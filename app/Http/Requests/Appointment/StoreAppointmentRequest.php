@@ -24,6 +24,10 @@ class StoreAppointmentRequest extends FormRequest
     {
         return [
             'patient_id' => 'required|exists:users,id',
+            'patient_name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'required|unique:users,phone',
+            'gender' => 'required|in:male,female',
             'department_id' => 'required|exists:departments,id',
             'clinic_id' => 'required|exists:clinics,id',
             'doctor_id' => 'required|exists:doctors,id',
