@@ -10,6 +10,7 @@ use App\Models\Department;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use App\Interfaces\AppointmentRepositoryInterface;
@@ -48,12 +49,23 @@ class AppointmentRepository implements AppointmentRepositoryInterface
      * @param StoreAppointmentRequest $storeAppointmentRequest
      * @return Appointment
      */
-    public function store(Request $request)
+    public function store(StoreAppointmentRequest $request)
     {
-        $data = $request->all();
+        $data = $request->validated();
+
+        DB::beginTransaction();
+
         try {
-            $patient = User::where('name', $data['patient_name'])->where('type', 'patient')->first();
-            if(!$patient){
+            $shift = Shift::findOrFail($data['shift_id']);
+            Log::info($shift);
+            // Check if the shift has reached its maximum capacity
+            if ($shift->appointments()->count() >= $shift->max_patients) {  
+                return redirect()->route('appointments.create')->with('errorCreate', 'This shift is already fully booked.');
+            }
+            $patient = User::where('name', $data['patient_name'])
+                           ->where('type', 'patient')
+                           ->first();
+            if (!$patient) {
                 $patient = User::create([
                     'name' => $data['patient_name'],
                     'email' => $data['email'],
@@ -63,12 +75,17 @@ class AppointmentRepository implements AppointmentRepositoryInterface
                     'gender' => $data['gender'],
                 ]);
             }
+
             $data['patient_id'] = $patient->id;
+
             Appointment::create($data);
+
+            DB::commit();
+
             return redirect()->route('appointments.index')->with('successCreate', 'Appointment created successfully.');
         } catch (\Exception $e) {
-            dd($e->getMessage());
-            return redirect()->route('appointments.index')->with('errorCreate', 'Appointment creation failed.');
+            DB::rollBack();
+            return redirect()->route('appointments.index')->with('errorCreate', 'Appointment creation failed: ' . $e->getMessage());
         }
     }
 

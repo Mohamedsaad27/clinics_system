@@ -1,4 +1,17 @@
 <x-admin-layout>
+        @push('scripts')
+            <script>
+                $(document).ready(function() {
+                    @if (Session::has('errorCreate'))
+                        iziToast.error({
+                            title: 'Error',
+                            position: 'topRight',
+                            message: '{{ Session::get('errorCreate') }}',
+                        });
+                    @endif
+                });
+            </script>
+        @endpush
     <style>
         /* Ensure the parent container is positioned relative for proper dropdown alignment */
         .position-relative {
@@ -222,8 +235,9 @@
 
                 <div class="col-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="mb-3">
-                        <label for="appointment_date" class="form-label">Time</label>
-                        <input type="time" class="form-control" id="appointment_date" name="appointment_date">
+                        <label for="appointment_date" class="form-label">Appointment Time</label>
+                        <input type="time" class="form-control" id="appointment_date" name="appointment_date" required>
+                        <small id="appointment_time_help" class="form-text text-muted"></small>
                         @error('appointment_date')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
@@ -434,89 +448,107 @@
         </script>
         {{-- Get Shift Doctor --}}
         <script>
-        $(document).ready(function() {
-            const viewShiftsBtn = $('#viewShiftsBtn');
-            const doctorSelect = $('#doctor');
-            const shiftsModal = new bootstrap.Modal(document.getElementById('doctorShiftsModal'));
-            let selectedShift = null; // Variable to store selected shift details
-        
-            doctorSelect.change(function() {
-                viewShiftsBtn.prop('disabled', !$(this).val());
-            });
-        
-            // View shifts for the selected doctor
-            viewShiftsBtn.click(function() {
-                const doctorId = doctorSelect.val();
-                if (doctorId) {
-                    $.ajax({
-                        url: '/admin/get-shift/' + doctorId,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(data) {
-                            let shiftsHtml = '';
-                            if (data.length > 0) {
-                                data.forEach(function(shift) {
-                                    shiftsHtml += `
-                                        <tr data-shift='${JSON.stringify(shift)}' class="select-shift">
-                                            <td>${shift.shift_day_during_month} ${shift.shift_month}</td>
-                                            <td>${shift.start_time}</td>
-                                            <td>${shift.end_time}</td>
-                                            <td>${shift.price_appoinment}</td>
-                                        </tr>
-                                    `;
-                                });
-                            } else {
-                                shiftsHtml = '<tr><td colspan="4" class="text-center">No shifts available for this doctor.</td></tr>';
-                            }
-                            $('#doctorShiftsContent').html(shiftsHtml);
-                            shiftsModal.show();
-                        },
-                        error: function() {
-                            $('#doctorShiftsContent').html('<tr><td colspan="4" class="text-center text-danger">Failed to load doctor shifts.</td></tr>');
-                            shiftsModal.show();
-                        }
-                    });
+       $(document).ready(function() {
+    const viewShiftsBtn = $('#viewShiftsBtn');
+    const doctorSelect = $('#doctor');
+    const shiftsModal = new bootstrap.Modal(document.getElementById('doctorShiftsModal'));
+    const appointmentDateInput = $('#appointment_date');
+    const appointmentTimeHelp = $('#appointment_time_help');
+    let selectedShift = null;
+
+    doctorSelect.change(function() {
+        viewShiftsBtn.prop('disabled', !$(this).val());
+    });
+
+    viewShiftsBtn.click(function() {
+        const doctorId = doctorSelect.val();
+        if (doctorId) {
+            $.ajax({
+                url: '/admin/get-shift/' + doctorId,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    let shiftsHtml = '';
+                    if (data.length > 0) {
+                        data.forEach(function(shift) {
+                            shiftsHtml += `
+                                <tr data-shift='${JSON.stringify(shift)}' class="select-shift">
+                                    <td>${shift.shift_day_during_month} ${shift.shift_month}</td>
+                                    <td>${shift.start_time}</td>
+                                    <td>${shift.end_time}</td>
+                                    <td>${shift.price_appoinment}</td>
+                                </tr>
+                            `;
+                        });
+                    } else {
+                        shiftsHtml = '<tr><td colspan="4" class="text-center">No shifts available for this doctor.</td></tr>';
+                    }
+                    $('#doctorShiftsContent').html(shiftsHtml);
+                    shiftsModal.show();
+                },
+                error: function() {
+                    $('#doctorShiftsContent').html('<tr><td colspan="4" class="text-center text-danger">Failed to load doctor shifts.</td></tr>');
+                    shiftsModal.show();
                 }
             });
+        }
+    });
+
+    $(document).on('click', '.select-shift', function() {
+        selectedShift = $(this).data('shift');
+        $('#shift-container').removeClass('d-none');
+        $('#shift-details').html(`<strong>Date:</strong> ${selectedShift.shift_day_during_month} ${selectedShift.shift_month}  <strong>Time:</strong> ${selectedShift.start_time} - ${selectedShift.end_time} <strong>Price:</strong> ${selectedShift.price_appoinment}`);
+        shiftsModal.hide();
         
-            // Capture the shift selection
-            $(document).on('click', '.select-shift', function() {
-                selectedShift = $(this).data('shift'); // Store the selected shift details
-                $('#shift-container').removeClass('d-none');
-                $('#shift-details').html(`<strong>Date:</strong> ${selectedShift.shift_day_during_month} ${selectedShift.shift_month}  <strong>Time:</strong> ${selectedShift.start_time} - ${selectedShift.end_time} <strong>Price:</strong> ${selectedShift.price_appoinment}`);
-                shiftsModal.hide();
-            });
-            // Add shift details to the form before submitting
-            $('form').submit(function(event) {
-                if (selectedShift) {
-                    $('<input>').attr({
-                        type: 'hidden',
-                        name: 'shift_id',
-                        value: selectedShift.id
-                    }).appendTo($(this));
-                    $('<input>').attr({
-                        type: 'hidden',
-                        name: 'shift_date',
-                        value: selectedShift.shift_day_during_month + ' ' + selectedShift.shift_month
-                    }).appendTo($(this));
-                    $('<input>').attr({
-                        type: 'hidden',
-                        name: 'shift_start_time',
-                        value: selectedShift.start_time
-                    }).appendTo($(this));
-                    $('<input>').attr({
-                        type: 'hidden',
-                        name: 'shift_end_time',
-                        value: selectedShift.end_time
-                    }).appendTo($(this));
-                    $('<input>').attr({
-                        type: 'hidden',
-                        name: 'shift_price',
-                        value: selectedShift.price_appoinment
-                    }).appendTo($(this));
-                }
-            });
-        });
+        // Update the appointment time input
+        appointmentDateInput.attr('min', selectedShift.start_time);
+        appointmentDateInput.attr('max', selectedShift.end_time);
+        appointmentTimeHelp.text(`Please select a time between ${selectedShift.start_time} and ${selectedShift.end_time}`);
+    });
+
+    appointmentDateInput.on('input', function() {
+        if (selectedShift) {
+            const selectedTime = $(this).val();
+            if (selectedTime < selectedShift.start_time || selectedTime > selectedShift.end_time) {
+                $(this).addClass('is-invalid');
+                appointmentTimeHelp.text(`Please select a time between ${selectedShift.start_time} and ${selectedShift.end_time}`).addClass('text-danger');
+            } else {
+                $(this).removeClass('is-invalid');
+                appointmentTimeHelp.text(`Valid time selected`).removeClass('text-danger').addClass('text-success');
+            }
+        }
+    });
+
+    $('form').submit(function(event) {
+        if (selectedShift) {
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'shift_id',
+                value: selectedShift.id
+            }).appendTo($(this));
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'shift_date',
+                value: selectedShift.shift_day_during_month + ' ' + selectedShift.shift_month
+            }).appendTo($(this));
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'shift_start_time',
+                value: selectedShift.start_time
+            }).appendTo($(this));
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'shift_end_time',
+                value: selectedShift.end_time
+            }).appendTo($(this));
+            $('<input>').attr({
+                type: 'hidden',
+                name: 'shift_price',
+                value: selectedShift.price_appoinment
+            }).appendTo($(this));
+        }
+    });
+});
     </script>
 
     @endpush

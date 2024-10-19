@@ -32,40 +32,48 @@
         <div class="container-fluid py-4">
             <div class="row g-4">
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-                    <div class="card bg-primary text-white h-100 dashboard-card">
-                        <div class="card-body text-center">
-                            <i class="fas fa-calendar-check card-icon"></i>
-                            <h5 class="card-title">Total Appointments</h5>
-                            <p class="card-text">{{ App\Models\Appointment::count() }}</p>
+                    <a href="{{ route('appointments.index') }}" class="text-decoration-none">
+                        <div class="card bg-primary text-white h-100 dashboard-card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-calendar-check card-icon"></i>
+                                <h5 class="card-title">Total Appointments</h5>
+                                <p class="card-text">{{ App\Models\Appointment::count() }}</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-                    <div class="card bg-success text-white h-100 dashboard-card">
-                        <div class="card-body text-center">
-                            <i class="fas fa-hospital card-icon"></i>
-                            <h5 class="card-title">Total Clinics</h5>
-                            <p class="card-text">{{ App\Models\Clinic::count() }}</p>
+                    <a href="{{ route('clinics.index') }}" class="text-decoration-none">
+                        <div class="card bg-success text-white h-100 dashboard-card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-hospital card-icon"></i>
+                                <h5 class="card-title">Total Clinics</h5>
+                                <p class="card-text">{{ App\Models\Clinic::count() }}</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-                    <div class="card bg-info text-white h-100 dashboard-card">
-                        <div class="card-body text-center">
-                            <i class="fas fa-user-md card-icon"></i>
+                    <a href="{{ route('doctors.index') }}" class="text-decoration-none">
+                        <div class="card bg-info text-white h-100 dashboard-card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-user-md card-icon"></i>
                             <h5 class="card-title">Total Doctors</h5>
                             <p class="card-text">{{ App\Models\Doctor::count() }}</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-                    <div class="card bg-warning text-white h-100 dashboard-card">
-                        <div class="card-body text-center">
-                            <i class="fas fa-users card-icon"></i>
+                    <a href="{{ route('patients.index') }}" class="text-decoration-none">
+                        <div class="card bg-warning text-white h-100 dashboard-card">
+                            <div class="card-body text-center">
+                                <i class="fas fa-users card-icon"></i>
                             <h5 class="card-title">Total Patients</h5>
                             <p class="card-text">{{ App\Models\User::where('type', 'patient')->count() }}</p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
                 <div class="col-12 col-md-6 col-lg-4 col-xl-3">
                     <div class="card bg-secondary text-white h-100 dashboard-card">

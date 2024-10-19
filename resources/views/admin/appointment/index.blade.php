@@ -8,7 +8,7 @@
                     message: '{{ Session::get('successCreate') }}',
                 });
             @endif
-
+            
             @if (Session::has('successDelete'))
                 iziToast.success({
                     title: 'Success',
@@ -40,7 +40,13 @@
                     message: '{{ Session::get('errorUpdate') }}',
                 });
             @endif
-
+            @if (Session::has('errorCreate'))
+                iziToast.error({
+                    title: 'Error',
+                    position: 'topRight',
+                    message: '{{ Session::get('errorCreate') }}',
+                });
+            @endif
             // Add this script to handle the delete confirmation modal
             $(document).ready(function() {
                 $('.delete').click(function(e) {
@@ -121,7 +127,7 @@
                                     style="width: 141.234px;">Clinic</th>
                                 <th class="sorting" tabindex="0" aria-controls="zero_config" rowspan="1"
                                     colspan="1" aria-label="Date: activate to sort column ascending"
-                                    style="width: 141.234px;">Date</th>
+                                    style="width: 141.234px;">Time</th>
                                 <th class="sorting" tabindex="0" aria-controls="zero_config" rowspan="1"
                                     colspan="1" aria-label="Status: activate to sort column ascending"
                                     style="width: 141.234px;">Status</th>
@@ -141,9 +147,9 @@
                                     <td>{{ $appointment->id }}</td>
                                     <td>{{ $appointment->patient->name }}</td>
                                     <td>{{ $appointment->doctor->user->name }}</td>
-                                    <td>{{ $appointment->shift->shift_month }} {{ $appointment->shift->shift_day_during_month }} from {{ $appointment->shift->start_time }} to {{ $appointment->shift->end_time }}</td>
+                                    <td>{{ $appointment->shift->shift_month }} from {{ \Carbon\Carbon::parse($appointment->shift->start_time)->format('h:i A') }} to {{ \Carbon\Carbon::parse($appointment->shift->end_time)->format('h:i A') }}</td>
                                     <td>{{ $appointment->clinic->clinic_name }}</td>
-                                    <td>{{ $appointment->appointment_date }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($appointment->appointment_date)->format('h:i A') }}</td>
                                     <td>{{ $appointment->status }}</td>
                                     <td><span class="{{ $appointment->sms_sent ? 'text-success' : 'text-danger' }}">{{ $appointment->sms_sent ? 'Sending' : 'Not Send' }}</span></td>
                                     <td>

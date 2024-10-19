@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Appointment;
 
+use Carbon\Carbon;
 use App\Models\Shift;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -23,7 +24,6 @@ class StoreAppointmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'patient_id' => 'required|exists:users,id',
             'patient_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'phone' => 'required|unique:users,phone',
@@ -34,21 +34,24 @@ class StoreAppointmentRequest extends FormRequest
             'shift_id' => 'required|exists:shifts,id',
             'appointment_date' => [
                 'required',
-                'unique:appointments,appointment_date',
                 'date_format:H:i',
                 function ($attribute, $value, $fail) {
                     $shift = Shift::find($this->shift_id);
-
-                    $appointmentDateTime = \Carbon\Carbon::parse($value);
-                    $startTime = \Carbon\Carbon::parse($shift->start_time);
-                    $endTime = \Carbon\Carbon::parse($shift->end_time);
-
-                    if ($appointmentDateTime < $startTime || $appointmentDateTime > $endTime) {
-                        return $fail('The appointment date must be within the shift time from ' . $shift->start_time . ' to ' . $shift->end_time);
+                    if (!$shift) {
+                        return $fail('Invalid shift selected.');
                     }
-                }
+
+                    $appointmentTime = Carbon::createFromFormat('H:i', $value);
+                    $startTime = Carbon::parse($shift->start_time);
+                    $endTime = Carbon::parse($shift->end_time);
+
+                    if ($appointmentTime->lt($startTime) || $appointmentTime->gt($endTime)) {
+                        return $fail("The appointment time must be between {$startTime->format('h:i')} and {$endTime->format('h:i')}.");
+                    }
+                },
             ],
             'status' => 'required|in:confirmed,pending,cancelled',
+            'medical_device' => 'nullable|exists:medical_devices,id',
         ];
     }
 }

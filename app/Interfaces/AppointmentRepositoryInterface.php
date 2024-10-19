@@ -11,7 +11,7 @@ interface AppointmentRepositoryInterface
 {
     public function index();
     public function create();
-    public function store(Request $request);
+    public function store(StoreAppointmentRequest $request);
     public function show(Appointment $appointment);
     public function edit(Appointment $appointment);
     public function update(UpdateAppointmentRequest $updateAppointmentRequest, Appointment $appointment);
